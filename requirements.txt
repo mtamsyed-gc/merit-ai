@@ -1,0 +1,17 @@
+# Merit AI runtime pins. Install per user from GC Artifactory in a normal PowerShell window:
+#   py -m pip install --user -r requirements.txt
+# Base set = Merit's native pins (ete-dashboard requirements-native.txt, verified 2026-10-06).
+# statsmodels / scipy / patsy added by decision D-8 (2026-10-25); the owner confirmed Artifactory carries them.
+# Versions below are the ones the P1 test suite ran on; re-confirm on the team's Python (3.12+, owner laptop 3.14).
+duckdb==1.5.6
+pyarrow==25.0.1
+pandas==3.0.6
+numpy==2.5.3
+openpyxl==3.1.5
+xlsxwriter==3.2.9
+python-dateutil==2.9.0.post0
+tzdata==2026.5
+scipy==1.18.1
+statsmodels==0.15.0
+patsy==1.0.3
+packaging==26.3

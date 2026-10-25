@@ -1,0 +1,68 @@
+{
+  "_note": "Planted effects of the synthetic pool (fictitious values, for testing only; nothing here describes a real market). The generator draws claims from exactly this model and writes it, plus the realised draws, to truth.json in each pack. Models must recover these values (G4.1). Frequencies are per life-year; severities are AED payer share per visit before relativities.",
+  "version": "PL-1.0",
+  "seed": 20261025,
+  "dates": {"uw_years": [2023, 2024, 2025, 2026], "valuation_date": "2026-06-30", "claims_extract_date": "2026-07-31",
+            "premium_extract_date": "2026-06-30", "trend_base_date": "2023-01-01"},
+  "benefits": {
+    "OP":        {"freq": 5.0,  "sev_mean": 350,   "sev_sigma": 0.9, "fob": "Out-Patient", "provider": ["Clinic / Medical Center", "Hospital"], "provider_p": [0.7, 0.3], "copay": 0.10, "icd": ["J06.9", "M54.5", "R51.9", "K21.9", "Z00.00"]},
+    "Pharmacy":  {"freq": 4.0,  "sev_mean": 180,   "sev_sigma": 0.8, "fob": "Out-Patient", "provider": ["Pharmacy"], "provider_p": [1.0], "copay": 0.10, "icd": ["J06.9", "E11.9", "I10", "M54.5"]},
+    "IP":        {"freq": 0.10, "sev_mean": 14000, "sev_sigma": 1.1, "fob": "In-Patient",  "provider": ["Hospital"], "provider_p": [1.0], "copay": 0.0, "icd": ["I21.9", "K35.80", "S72.001A", "C50.919", "J18.9"]},
+    "Maternity": {"freq": 0.25, "sev_mean": 9000,  "sev_sigma": 0.6, "fob": "Maternity",   "provider": ["Hospital"], "provider_p": [1.0], "copay": 0.0, "icd": ["O80", "O82", "Z34.90"], "eligible": "Maternity Eligible Female"},
+    "Dental":    {"freq": 0.60, "sev_mean": 600,   "sev_sigma": 0.8, "fob": "Dental",      "provider": ["Dental Center"], "provider_p": [1.0], "copay": 0.20, "icd": ["K02.9", "K05.10"]},
+    "Optical":   {"freq": 0.25, "sev_mean": 450,   "sev_sigma": 0.6, "fob": "Optical",     "provider": ["Optical Center"], "provider_p": [1.0], "copay": 0.20, "icd": ["H52.13", "H52.4"]}
+  },
+  "unmapped_fob_share": {"Psychiatry": 0.01, "Wellness & Preventive": 0.01},
+  "freq_rel": {
+    "age_band": {"00-01": 1.8, "02-18": 0.7, "19-25": 0.8, "26-35": 0.9, "36-50": 1.0, "51-60": 1.4, "61+": 2.0},
+    "gender": {"Male": 1.0, "Female": 1.15},
+    "tier": {"CN": 1.15, "GN": 1.10, "GN_XM": 1.05, "RN": 1.0, "RN2": 0.95, "RN3": 0.90, "VN": 0.80},
+    "regulator": {"DHA": 1.0, "DOH": 1.08, "MOHAP": 0.95},
+    "policy_type": {"GROUP": 1.0, "SME": 1.05}
+  },
+  "sev_rel": {
+    "tier": {"CN": 1.40, "GN": 1.25, "GN_XM": 1.12, "RN": 1.0, "RN2": 0.92, "RN3": 0.85, "VN": 0.70},
+    "regulator": {"DHA": 1.0, "DOH": 1.10, "MOHAP": 0.90}
+  },
+  "rel_excludes": {"Maternity": ["age_band", "gender"]},
+  "trend": {"freq_pa": 0.02, "sev_pa": 0.06},
+  "seasonality": [1.05, 1.03, 1.02, 0.98, 0.97, 0.92, 0.85, 0.88, 1.02, 1.08, 1.10, 1.10],
+  "heterogeneity": {"cedant_sigma": 0.10, "policyholder_sigma": 0.15, "_note": "lognormal frequency effects with mean 1: cedant level drawn once per cedant, policyholder level once per master contract"},
+  "large_loss": {"rate_per_1000_ly": 1.2, "threshold": 250000, "pareto_alpha": 2.2, "cap": 5000000, "benefit": "IP"},
+  "reporting": {
+    "report_lag_pmf": {"NAS": [0.35, 0.30, 0.15, 0.10, 0.05, 0.03, 0.02], "NEXTCARE": [0.30, 0.30, 0.18, 0.10, 0.06, 0.04, 0.02],
+                       "MEDNET": [0.40, 0.30, 0.15, 0.08, 0.04, 0.02, 0.01], "AAFIYA": [0.25, 0.30, 0.20, 0.12, 0.07, 0.04, 0.02],
+                       "E-CARE": [0.30, 0.25, 0.20, 0.12, 0.07, 0.04, 0.02]},
+    "paid_lag_pmf": [0.5, 0.3, 0.15, 0.05]
+  },
+  "premium": {"net_to_gross": 0.97, "loss_ratio_target_range": [0.75, 0.95]},
+  "members": {"principal_male": 0.70, "dependants_per_principal": 0.8, "spouse_share_of_dependants": 0.40,
+              "joiner_share": 0.10, "leaver_share": 0.08, "member_retention": 0.80, "policy_renewal": 0.85,
+              "policy_size_lognormal": [3.2, 1.1], "policy_size_min": 2, "policy_size_max": 1500},
+  "nationality": {"values": ["Indian", "Pakistani", "Filipino", "Egyptian", "Emirati", "British", "Jordanian", "Chinese"],
+                  "groups": {"Indian": "Indian-Subcontinent", "Pakistani": "Indian-Subcontinent", "Filipino": "Asian", "Chinese": "Asian",
+                             "Egyptian": "Other Arab", "Jordanian": "Other Arab", "Emirati": "GCC Arab", "British": "Western Expat"},
+                  "p": [0.30, 0.12, 0.12, 0.10, 0.08, 0.10, 0.10, 0.08]},
+  "region_raw": {"DHA": "Dubai Health Authority", "DOH": "Health Authority Abu Dhabi", "MOHAP": "Ministry Of Health - UAE"},
+  "region_group_raw": {"DHA": "DHA", "DOH": "HAAD", "MOHAP": "MOH"},
+  "cedants": [
+    {"code": "C01", "name": "Alpha Mutual Insurance (synthetic)", "lives_2023": 4000, "growth": 0.06,
+     "tpas": {"NAS": 0.6, "NEXTCARE": 0.4}, "tiers": {"CN": 0.15, "GN": 0.30, "GN_XM": 0.10, "RN": 0.25, "RN2": 0.10, "RN3": 0.10},
+     "regulators": {"DHA": 0.7, "DOH": 0.1, "MOHAP": 0.2}, "sme_share": 0.30, "match_rate": 0.98},
+    {"code": "C02", "name": "Beacon Takaful (synthetic)", "lives_2023": 3000, "growth": 0.10,
+     "tpas": {"MEDNET": 1.0}, "tiers": {"GN": 0.10, "RN": 0.30, "RN2": 0.30, "RN3": 0.20, "VN": 0.10},
+     "regulators": {"DHA": 0.5, "DOH": 0.3, "MOHAP": 0.2}, "sme_share": 0.50, "match_rate": 0.97},
+    {"code": "C03", "name": "Cedar General Insurance (synthetic)", "lives_2023": 5000, "growth": 0.03,
+     "tpas": {"NEXTCARE": 0.7, "AAFIYA": 0.3}, "tiers": {"CN": 0.25, "GN": 0.35, "RN": 0.25, "RN2": 0.15},
+     "regulators": {"DHA": 0.4, "DOH": 0.5, "MOHAP": 0.1}, "sme_share": 0.20, "match_rate": 0.99},
+    {"code": "C04", "name": "Dune Health Insurance (synthetic)", "lives_2023": 2500, "growth": 0.15,
+     "tpas": {"E-CARE": 0.5, "MEDNET": 0.5}, "tiers": {"RN2": 0.30, "RN3": 0.40, "VN": 0.30},
+     "regulators": {"DHA": 0.6, "DOH": 0.0, "MOHAP": 0.4}, "sme_share": 0.60, "match_rate": 0.91},
+    {"code": "C05", "name": "Ember National Assurance (synthetic)", "lives_2023": 3500, "growth": 0.05,
+     "tpas": {"NAS": 0.5, "AAFIYA": 0.5}, "tiers": {"CN": 0.10, "GN": 0.25, "RN": 0.30, "RN2": 0.20, "RN3": 0.15},
+     "regulators": {"DHA": 0.3, "DOH": 0.6, "MOHAP": 0.1}, "sme_share": 0.25, "match_rate": 0.96},
+    {"code": "C06", "name": "Falcon Shield Insurance (synthetic)", "lives_2023": 2000, "growth": 0.08,
+     "tpas": {"NEXTCARE": 1.0}, "tiers": {"GN": 0.20, "RN": 0.30, "RN2": 0.20, "RN3": 0.20, "VN": 0.10},
+     "regulators": {"DHA": 0.8, "DOH": 0.1, "MOHAP": 0.1}, "sme_share": 0.40, "match_rate": 0.82}
+  ]
+}

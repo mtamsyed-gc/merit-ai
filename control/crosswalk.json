@@ -1,0 +1,156 @@
+{
+ "_note": "Pool vocabulary (D-1). Translates each submission's Merit standard values into one pool list per factor. Network tiers are a monitoring dimension placed by rate-table column position, not a burning-cost ranking. Values not found map to 'Unmapped' and are counted by G2.3; nothing is guessed. Entries marked status 'proposed' need the owner's confirmation before Stream 2 uses them on real data.",
+ "version": "CW-1.1",
+ "network": {
+  "_decision": "D-1, tier map v1 2026-10-25; roll-up accepted 2026-10-25 16:35",
+  "tiers": [
+   "CN",
+   "GN",
+   "GN_XM",
+   "RN",
+   "RN2",
+   "RN3",
+   "VN"
+  ],
+  "tier_labels": {
+   "CN": "CN",
+   "GN": "GN",
+   "GN_XM": "GN excl. Mediclinic (filed on GN)",
+   "RN": "RN",
+   "RN2": "RN2",
+   "RN3": "RN3",
+   "VN": "VN"
+  },
+  "pooled_as": {
+   "GN_XM": "GN"
+  },
+  "rollup": {
+   "CN": "Top",
+   "GN": "Top",
+   "GN_XM": "Top",
+   "RN": "Mid",
+   "RN2": "Mid",
+   "RN3": "Basic",
+   "VN": "Basic"
+  },
+  "by_tpa": {
+   "NAS": {
+    "CN": "CN",
+    "GN": "GN",
+    "GN EXCL. MEDICLINIC": "GN_XM",
+    "RN": "RN",
+    "SRN": "RN2",
+    "WN": "RN3",
+    "VN": "VN"
+   },
+   "NEXTCARE": {
+    "GN+": "CN",
+    "GN": "GN",
+    "GN EXCL. MEDICLINIC": "GN_XM",
+    "RN": "RN",
+    "RN2": "RN2",
+    "RN3": "RN3",
+    "RN3 (OP CLINICS ONLY)": "VN"
+   },
+   "MEDNET": {
+    "GOLD": "CN",
+    "SILVER PREMIUM": "GN",
+    "SILVER CLASSIC": "GN_XM",
+    "GREEN": "RN",
+    "EMERALD": "RN2",
+    "PEARL": "RN3",
+    "SILK ROAD": "VN"
+   },
+   "AAFIYA": {
+    "ELITE": "CN",
+    "DIAMOND": "GN",
+    "GOLD": "RN",
+    "PLUS": "RN2",
+    "APN EDGE / ESSENTIAL": "RN3",
+    "APN (ENHANCED EBP)": "VN"
+   },
+   "E-CARE": {
+    "CLASSIC": "RN2",
+    "GREEN": "RN3",
+    "BLUE": "VN"
+   }
+  },
+  "match": "TPA upper-cased, network trimmed and upper-cased; exact match only",
+  "notes": {
+   "AAFIYA:APN (ENHANCED EBP)": "VN tier and also the mandatory-basic segment (SPEC Stream 2 step 4)"
+  },
+  "_open": "Names are exactly as in the owner's table. Whether AAFIYA 'APN Edge / Essential' is one network or two ('APN Edge', 'Essential') is open (HANDOVER Q7); until answered only the literal name maps."
+ },
+ "regulator": {
+  "_decision": "D-1: three regulator regions; provider emirate + Outside UAE kept as a claims attribute",
+  "values": [
+   "DHA",
+   "DOH",
+   "MOHAP"
+  ],
+  "from_region_group": {
+   "DHA": "DHA",
+   "HAAD": "DOH",
+   "DOH": "DOH",
+   "MOH": "MOHAP",
+   "MOHAP": "MOHAP"
+  },
+  "source_column": "Region Group"
+ },
+ "benefit": {
+  "_decision": "D-1: six groups; bundled pharmacy labelled, never split",
+  "values": [
+   "IP",
+   "OP",
+   "Pharmacy",
+   "Maternity",
+   "Dental",
+   "Optical"
+  ],
+  "labels": {
+   "IP": "Inpatient (incl. day-case)",
+   "OP": "Outpatient",
+   "Pharmacy": "Pharmacy",
+   "Maternity": "Maternity",
+   "Dental": "Dental",
+   "Optical": "Optical",
+   "OP_INCL_PHARMACY": "Outpatient incl. pharmacy (TPA cannot split)"
+  },
+  "from_fob": {
+   "IN-PATIENT": "IP",
+   "OUT-PATIENT": "OP",
+   "MATERNITY": "Maternity",
+   "DENTAL": "Dental",
+   "OPTICAL": "Optical"
+  },
+  "pharmacy_rule": {
+   "status": "proposed",
+   "rule": "FOB Out-Patient on a line whose Provider Type is Pharmacy -> Pharmacy; a TPA with no Pharmacy provider type in the submission -> its Out-Patient lines are OP_INCL_PHARMACY",
+   "why": "Merit's FOB list has no Pharmacy class; pharmacy is visible only through Provider Type"
+  },
+  "unmapped_fob": {
+   "status": "open",
+   "values": [
+    "PSYCHIATRY",
+    "ALTERNATIVE MEDICINE",
+    "WELLNESS & PREVENTIVE",
+    "ASSISTANCE",
+    "OTHER"
+   ],
+   "note": "Merit standard FOB values outside the six groups: Unmapped (G2.3) until the owner assigns them"
+  },
+  "status": "proposed",
+  "_open": "D-1 decided six groups; the group codes, labels and the FOB -> group map below are proposed by Claude from Merit's FOB list and need the owner's confirmation (HANDOVER Q2, Q3)."
+ },
+ "segments": {
+  "mandatory_basic": {
+   "status": "proposed",
+   "rule": "Network or plan marked EBP / Basic (e.g. AAFIYA APN (Enhanced EBP)); never blended with enhanced plans"
+  },
+  "excluded": {
+   "_decision": "D-1: government-funded schemes (Thiqa-type) excluded",
+   "status": "open",
+   "rule": "identification rule to be confirmed (which Merit field marks a government-funded scheme)"
+  }
+ }
+}

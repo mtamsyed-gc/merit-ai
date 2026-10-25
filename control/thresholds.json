@@ -1,0 +1,166 @@
+{
+ "_note": "Gate thresholds (SPEC gate tables; DECIDED values from SPEC 'Decisions needed' override proposed ones). Keyed by check id. Changing a value is a recorded decision: bump 'version' and log it in HANDOVER.md.",
+ "version": "TH-1.0",
+ "checks": {
+  "G1.1": {
+   "contract_version_missing_level": "Flag",
+   "_open": "SPEC G1.1 is Stop on an exact version match. Merit does not stamp its contract version in run_manifest yet; until it does, schema conformance is the test and a missing stamp is raised at the level above (interim rule, owner to confirm: HANDOVER Q1)."
+  },
+  "G1.2": {
+   "fan_diff_abs_max": 0.01,
+   "_source": "Merit user manual 3.13: FanDiff is 0 within rounding (< 0.01). Proposed as the G1.2 tolerance; owner to confirm (HANDOVER Q8)."
+  },
+  "G1.3": {
+   "full_min": 0.95,
+   "restricted_min": 0.85,
+   "measures": [
+    "count",
+    "amount"
+   ],
+   "basis": "in_scope",
+   "_decision": "D-2"
+  },
+  "G1.4": {
+   "patterns": {
+    "emirates_id": "(?:^|[^0-9A-Za-z.+]|[A-Za-z]\\.)784[- ]?[0-9]{4}[- ]?[0-9]{7}[- ]?[0-9](?:$|[^0-9A-Za-z])",
+    "email": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}",
+    "uae_phone": "(?:^|[^0-9A-Za-z.+]|[A-Za-z]\\.)(?:(?:\\+|00)?971[- ]?(?:\\(0\\)[- ]?)?|0)(?:5[0-9](?:[- ]?[0-9]){7}|[2-9](?:[- ]?[0-9]){7})(?:$|[^0-9A-Za-z])"
+   },
+   "max_hits": 0,
+   "_scope": "every header and every value of every table (each column cast to text); full scan. A match needs a non-alphanumeric boundary on both sides (so hex hash tokens and decimals do not match); a '.' before the number counts as a boundary only after a letter (e.g. 'Tel.050...'). Personal names cannot be pattern-detected: they are excluded by the allowed-column list (P2).",
+   "_patterns_note": "UAE mobile = 05x + 7 digits; landline = 0[2-9] + 7 digits; international 971 / +971 / 00971 with optional (0)."
+  },
+  "G1.8": {},
+  "G2.3": {
+   "pass_max": 0.02,
+   "flag_max": 0.1
+  },
+  "G2.4": {
+   "flag_above": 0.05
+  },
+  "G2.5": {
+   "robust_z_abs": 3.5
+  },
+  "G2.6": {
+   "single_cedant_share_max": 0.5
+  },
+  "G2.7": {
+   "cf_maturity_min": 0.8
+  },
+  "G3.3": {
+   "z_rollup_below": 0.3
+  },
+  "G3.4": {
+   "leave_one_out_change_max": 0.15
+  },
+  "G3.5": {
+   "movement_max": 0.2
+  },
+  "G3.6": {
+   "trend_interval_width_max_pts": 10.0
+  },
+  "G4.1": {
+   "relativity_tolerance": 0.03
+  },
+  "G4.2": {
+   "level_exposure_min_share": 0.01
+  },
+  "G4.3": {
+   "balance_tolerance": 0.001
+  },
+  "G4.5": {
+   "one_way_gap_max": 0.15
+  },
+  "G4.6": {
+   "interval_width_max_share": 0.2
+  },
+  "G5.1": {
+   "ae_min": 0.95,
+   "ae_max": 1.05
+  },
+  "G5.2": {
+   "ae_min": 0.9,
+   "ae_max": 1.1,
+   "z_min": 0.5
+  },
+  "G5.6": {
+   "coverage_min": 0.8,
+   "coverage_max": 0.97,
+   "interval": 0.9
+  },
+  "G6.4": {
+   "out_of_domain_share_max": 0.1,
+   "z_low": 0.3
+  }
+ },
+ "credibility": {
+  "_decision": "D-3",
+  "p": 0.9,
+  "k": 0.1,
+  "cv_basis": "capped",
+  "badges": {
+   "high_min": 0.7,
+   "medium_min": 0.3
+  },
+  "client_k_level": "policyholder",
+  "cedant_k_review_at_cedants": 10
+ },
+ "model_minimums": {
+  "_decision": "D-3",
+  "M1": {
+   "developed_months": 24
+  },
+  "M2": {
+   "life_years": 20000,
+   "cedants": 5
+  },
+  "M3": {
+   "uw_years_per_group": 2
+  },
+  "M4": {
+   "cohorts_per_triangle": 12
+  },
+  "M5": {
+   "claimants_above_threshold": 50
+  }
+ },
+ "large_claim": {
+  "_decision": "D-7",
+  "basis": "claimant_policy_year_all_benefits",
+  "provisional_threshold_aed": 500000,
+  "provisional": true,
+  "apply_after": [
+   "development",
+   "trend"
+  ]
+ },
+ "monitoring": {
+  "psi_max": 0.25,
+  "ae_min": 0.9,
+  "ae_max": 1.1,
+  "ae_quarters": 2,
+  "trend_gap_pts": 3.0,
+  "new_cedant_share_max": 0.2
+ },
+ "cadence": {
+  "_decision": "D-10",
+  "publication": "quarterly window",
+  "publish_if_exposure_added_min": 0.1,
+  "publish_if_valuation_moves": true,
+  "recalibration": "annual",
+  "recalibration_finish_by_month": 4
+ },
+ "trend": {
+  "_decision": "D-5",
+  "mode": "benchmark_only",
+  "pricing_default_pa": 0.1,
+  "governed_default_after_M1": {
+   "interval_width_max_pts": 4.0,
+   "corridor": [
+    0.05,
+    0.15
+   ],
+   "reset": "annual"
+  }
+ }
+}

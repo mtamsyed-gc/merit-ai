@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv*/
+# runtime folders: never committed (pool data, run outputs, generated synthetic packs)
+pool/
+runs/
+out/
+dist/
+*.duckdb
+*.duckdb.wal
+~$*.xlsx

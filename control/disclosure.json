@@ -1,0 +1,60 @@
+{
+ "_note": "Disclosure classes (D-4). Every benchmark measure belongs to one class; a client-visible cell must meet its class. If the requesting client is the majority of a cell: leave-own-out if the cell still passes, else the parent level.",
+ "version": "DS-1.1",
+ "classes": {
+  "loss_cost": {
+   "min_cedants": 3,
+   "max_single_share": 0.5,
+   "min_life_years": 500
+  },
+  "pricing": {
+   "min_cedants": 5,
+   "max_single_share": 0.25,
+   "min_life_years": 1000
+  }
+ },
+ "measures": {
+  "frequency_per_1000_ly": "loss_cost",
+  "severity": "loss_cost",
+  "burning_cost_per_ly": "loss_cost",
+  "pmpm": "loss_cost",
+  "utilisation": "loss_cost",
+  "cost_per_visit": "loss_cost",
+  "trend_rate": "loss_cost",
+  "completion_factor": "loss_cost",
+  "provider_cost_index": "loss_cost",
+  "diagnosis_cost_index": "loss_cost",
+  "premium_per_ly": "pricing",
+  "earned_loss_ratio": "pricing",
+  "ultimate_loss_ratio": "pricing"
+ },
+ "client_majority": {
+  "share_above": 0.5,
+  "action": "leave_own_out_else_parent"
+ },
+ "min_data_age_months": {
+  "value": 3,
+  "status": "proposed",
+  "note": "suggested in the D-4 discussion, not decided"
+ },
+ "_classification_status": {
+  "decided": [
+   "frequency_per_1000_ly",
+   "severity",
+   "burning_cost_per_ly",
+   "pmpm",
+   "utilisation",
+   "cost_per_visit",
+   "premium_per_ly",
+   "earned_loss_ratio",
+   "ultimate_loss_ratio"
+  ],
+  "proposed": [
+   "trend_rate",
+   "completion_factor",
+   "provider_cost_index",
+   "diagnosis_cost_index"
+  ],
+  "_note": "D-4 decided loss-cost vs premium / loss-ratio measures. Placing trend, completion factors and provider / diagnosis indices in the loss-cost class is proposed (HANDOVER Q9)."
+ }
+}
