@@ -82,7 +82,7 @@ Open questions for the owner (defaults in use):
 | Q10 | Merit change request bundle: (a) stamp contract_version (Q1); (b) none else needed now | Not raised |
 
 ## Next step
-1. Owner: create the GitHub repository mtamsyed-gc/merit-ai (private, empty) if not done; Claude attaches and pushes.
+1. Done 2026-10-25 18:05: repository mtamsyed-gc/merit-ai created; main = e1c9429 (P1).
 2. Owner: run `launchers\00_Self_test.cmd` and `01_Run_tests.cmd` on the laptop after installing requirements.txt.
 3. Owner: answer Q1-Q6.
 4. P2 Pool v1: Stream 1 submission export + anonymisation (pool IDs, keyed hashes, allow-list) and Stream 2
