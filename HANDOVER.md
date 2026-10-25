@@ -1,6 +1,6 @@
 # Handover — Merit AI
 
-Last updated: 2026-10-25 (P1 Foundations).
+Last updated: 2026-10-25 (P1 Foundations; contract re-pinned to Merit v7.3.2 source a350841, synthetic runs stamped).
 
 Read this, then CLAUDE.md, then the SPEC.md sections the task names.
 
@@ -45,7 +45,9 @@ Built:
   thresholds.json TH-1.0 (D-2..D-10 values), crosswalk.json CW-1.1 (D-1 tier map exactly as the owner's table,
   roll-up, regulators; benefit-group map proposed), disclosure.json DS-1.1 (D-4; four measure placements proposed).
 - `contract/`: Merit contract IP4-8 pinned STRUCTURE-ONLY (descriptions dropped: they name real cedants) by
-  `tools/pin_contract.py` from ete-dashboard b83de15 (source sha256 e6652d91..., pinned copy 1c71f611...).
+  `tools/pin_contract.py`; re-pinned 2026-10-25 from ete-dashboard a350841 (Merit v7.3.2, manifest key contract_version
+  documented; pinned copy unchanged, 1c71f611...). Synthetic runs now carry contract_version as v7.3.2 runs do
+  (`run.py synth --no-stamp` writes pre-v7.3.2 manifests).
 - Strict reading (`meritai/contract.py`): CSV header and rows must parse exactly (no sniffing); any parse failure is
   a Stop with a content-free message; strict type forms (int, yyyy-mm-dd, finite decimal).
 - `meritai/synth.py` + `synth/plant.json` PL-1.0: six fictitious cedants as Merit v7 run folders; planted
@@ -70,7 +72,7 @@ Built:
 Open questions for the owner (defaults in use):
 | # | Question | In use |
 | --- | --- | --- |
-| Q1 | SPEC G1.1 = Stop on an exact contract version, but Merit writes no version into its run files. Raise a Merit change request to stamp `contract_version` in run_manifest? Until then G1.1 checks the structure and FLAGs the missing stamp (a departure from SPEC until you confirm) | FLAG |
+| Q1 | DONE in Merit v7.3.2 (2026-10-25, ete-dashboard a350841): both run manifests carry `contract_version`. Open part: a run from Merit v7.3.1 or earlier (no stamp): re-run on v7.3.2 before pooling (recommended; G1.1 missing-stamp level -> Stop, as SPEC) or accept with a signed Flag? | Missing stamp = FLAG until the owner answers |
 | Q2 | Merit's FOB list has no Pharmacy class. Proposed: Out-Patient lines at a Pharmacy provider = Pharmacy; a TPA with no pharmacy provider type = "OP incl. pharmacy". Also confirm the six group codes and the FOB -> group map | Proposed |
 | Q3 | Merit FOB values outside the six groups (Psychiatry, Alternative Medicine, Wellness & Preventive, Assistance, Other): which group, if any? | Unmapped (G2.3 counts them) |
 | Q4 | Government-funded schemes are excluded (D-1): which Merit field identifies them? | Open |
@@ -79,7 +81,7 @@ Open questions for the owner (defaults in use):
 | Q7 | AAFIYA "APN Edge / Essential": one network or two names? | Only the literal name maps |
 | Q8 | G1.2 tolerance for the member-month fan-out: 0.01 (Merit manual 3.13 "0 within rounding, < 0.01")? | 0.01 |
 | Q9 | Disclosure class for trend rates, completion factors and provider / diagnosis indices: loss-cost (3 / 50% / 500 LY)? | Loss-cost (proposed) |
-| Q10 | Merit change request bundle: (a) stamp contract_version (Q1); (b) none else needed now | Not raised |
+| Q10 | Merit change request bundle | (a) done in v7.3.2; nothing else open |
 
 ## Next step
 1. Done 2026-10-25 18:05: repository mtamsyed-gc/merit-ai created; main = e1c9429 (P1).

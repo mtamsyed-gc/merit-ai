@@ -41,6 +41,19 @@ def _stamp(run, file, version):
     pd.concat([df, pd.DataFrame([{"Key": "contract_version", "Value": version}])]).to_csv(p, index=False)
 
 
+def _unstamp(run):
+    for p in (run / "csv").glob("run_manifest*.csv"):
+        df = pd.read_csv(p, dtype=str, keep_default_na=False)
+        df[df["Key"] != "contract_version"].to_csv(p, index=False)
+
+
+def _restamp(run, file, version):
+    p = run / "csv" / file
+    df = pd.read_csv(p, dtype=str, keep_default_na=False)
+    df.loc[df["Key"] == "contract_version", "Value"] = version
+    df.to_csv(p, index=False)
+
+
 def _ragged(run, table, extra):
     with open(_csv(run, table), "a", encoding="utf-8") as f:
         f.write(extra + "\n")
@@ -73,11 +86,10 @@ d, _ = pack()
 
 CASES = {
     "G1.1": [
-        ("clean, unstamped -> FLAG (interim rule)", lambda r: None, "FLAG"),
-        ("stamped with the pinned version -> PASS", lambda r: _stamp(r, "run_manifest_premium.csv", "IP4-8"), "PASS"),
-        ("stamped with another version -> STOP", lambda r: _stamp(r, "run_manifest_premium.csv", "IP4-7"), "STOP"),
-        ("conflicting stamps across manifests -> STOP",
-         lambda r: (_stamp(r, "run_manifest_premium.csv", "IP4-8"), _stamp(r, "run_manifest_claims.csv", "IP4-7")),
+        ("stamped with the pinned version (Merit v7.3.2+) -> PASS", lambda r: None, "PASS"),
+        ("unstamped (Merit before v7.3.2) -> FLAG (interim rule, HANDOVER Q1)", lambda r: _unstamp(r), "FLAG"),
+        ("stamped with another version -> STOP", lambda r: _restamp(r, "run_manifest_premium.csv", "IP4-7"), "STOP"),
+        ("conflicting stamps across manifests -> STOP", lambda r: _restamp(r, "run_manifest_claims.csv", "IP4-7"),
          "STOP"),
         ("column missing -> STOP", lambda r: _drop(r, "fact_claims", "PayerShare"), "STOP"),
         ("date not yyyy-mm-dd -> STOP", lambda r: _set(r, "fact_member_month", "MonthStart", 0, "2026-7-1"), "STOP"),
@@ -90,8 +102,8 @@ CASES = {
         ("exceptions file lacks a contract column -> STOP", lambda r: _drop(r, "exceptions", "Message"), "STOP"),
         ("ragged row -> STOP", lambda r: _ragged(r, "fact_member_month", f"1,2,3,{EID}"), "STOP"),
         ("empty file -> STOP", lambda r: _csv(r, "ultimates").write_text("", encoding="utf-8"), "STOP"),
-        ("header-only table reads (no rows) -> FLAG", lambda r: _csv(r, "ultimates").write_text(
-            _csv(r, "ultimates").read_text(encoding="utf-8").splitlines()[0] + "\n", encoding="utf-8"), "FLAG"),
+        ("header-only table reads (no rows) -> PASS", lambda r: _csv(r, "ultimates").write_text(
+            _csv(r, "ultimates").read_text(encoding="utf-8").splitlines()[0] + "\n", encoding="utf-8"), "PASS"),
     ],
     "G1.4": [
         ("clean -> PASS", lambda r: None, "PASS"),

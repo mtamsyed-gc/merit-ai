@@ -246,7 +246,7 @@ def _round(df, cols, nd):
         df[c] = df[c].astype(float).round(nd)
 
 
-def generate(out_dir, plant=None, seed=None, scale=0.1, stamp_contract=False, progress=print, overwrite=False):
+def generate(out_dir, plant=None, seed=None, scale=0.1, stamp_contract=True, progress=print, overwrite=False):
     """Write a synthetic pool pack to out_dir and return its truth dict. out_dir must be empty or absent unless
     overwrite=True (then it is cleared first), so no stale cedant folder survives."""
     P = plant or load_plant()
@@ -588,13 +588,15 @@ def generate(out_dir, plant=None, seed=None, scale=0.1, stamp_contract=False, pr
         manp = [("valuation_date", D["valuation_date"]), ("premium_extract_date", D["premium_extract_date"]),
                 ("workflow", "Merit_02_Premium"), ("workflow_version", "SYNTH"), ("default_premium_basis", "Gross"),
                 ("currency", "AED"), ("has_member_dob", "1")]
-        if stamp_contract:
+        if stamp_contract:              # Merit v7.3.2+ stamps both manifests (ete-dashboard TPA_RULES 74)
             manp.append(("contract_version", pin["version"]))
         _write(pd.DataFrame(manp, columns=["Key", "Value"]), run / "run_manifest_premium.csv", ["Key", "Value"])
         manc = [("valuation_date", D["valuation_date"]), ("claims_extract_date", D["claims_extract_date"]),
                 ("claims_workflow", "Merit_03_Claims"), ("claims_workflow_version", "SYNTH"),
                 ("large_claim_threshold", "100000"), ("has_claim_dob", "0"), ("has_paid_date", "1"),
                 ("has_reported_date", "1"), ("has_icd", "1"), ("has_provider", "1"), ("has_fob", "1")]
+        if stamp_contract:
+            manc.append(("contract_version", pin["version"]))
         _write(pd.DataFrame(manc, columns=["Key", "Value"]), run / "run_manifest_claims.csv", ["Key", "Value"])
 
         truth["cedants"][code] = {

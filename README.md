@@ -24,8 +24,8 @@ client run. Merit AI only reads Merit's outputs; it never changes Merit.
 | 4 Gate G1 | Runs the ingest checks built so far on each fictitious insurer | Shows the gates work end to end |
 | 5 Gate report | Writes `out\selftest_reports\G1_selftest.xlsx` | The report a reviewer reads: one row per check, its result, what it means and what to do |
 
-Expected today: every insurer shows **FLAG** on G1.1. Merit does not yet write its contract version into its
-run files, so the table structure is checked instead and the missing stamp is flagged for a person to accept.
+Expected: every insurer shows **PASS (incomplete)** on G1. The synthetic runs carry Merit's contract version stamp
+(Merit v7.3.2 or later); "incomplete" means the G1 checks of later phases are not built yet.
 
 ## Reading a gate report
 

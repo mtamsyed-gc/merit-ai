@@ -43,7 +43,7 @@ def done(name):
 
 
 @lru_cache(maxsize=None)
-def pack(scale=0.03, seed=None, stamp=False):
+def pack(scale=0.03, seed=None, stamp=True):
     """A synthetic pack in a temporary folder (cached per process)."""
     d = tmpdir("meritai_pack_")
     truth = synth.generate(d, seed=seed, scale=scale, stamp_contract=stamp, progress=lambda m: None)

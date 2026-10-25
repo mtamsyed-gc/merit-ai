@@ -71,7 +71,7 @@ def cmd_selftest(a):
     if bad:
         say(f"SELF-TEST FAILED: {len(bad)} cedant(s) stopped at G1")
         return 1
-    say("SELF-TEST PASSED (Flags shown are expected: Merit does not stamp its contract version yet)")
+    say("SELF-TEST PASSED")
     return 0
 
 
@@ -117,7 +117,8 @@ def main(argv=None):
     s.add_argument("--out", required=True)
     s.add_argument("--scale", type=float, default=0.1)
     s.add_argument("--seed", type=int, default=None)
-    s.add_argument("--stamp-contract", action="store_true")
+    s.add_argument("--no-stamp", dest="stamp_contract", action="store_false",
+                   help="write manifests without contract_version, as Merit before v7.3.2")
     s.add_argument("--overwrite", action="store_true", help="replace a non-empty output folder")
     s = sub.add_parser("contract")
     s.add_argument("run_dir")
