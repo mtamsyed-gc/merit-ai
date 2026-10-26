@@ -1,6 +1,6 @@
 # Handover — Merit AI
 
-Last updated: 2026-10-25 (P1 Foundations; contract re-pinned to Merit v7.3.2 source a350841, synthetic runs stamped).
+Last updated: 2026-10-26 (contract re-pinned to IP4-9 = Merit v7.5.0, ete-dashboard 3eaaa30, owner's instruction; before: 2026-10-25 P1 Foundations, re-pin to the Merit v7.3.2 source a350841, synthetic runs stamped).
 
 Read this, then CLAUDE.md, then the SPEC.md sections the task names.
 
@@ -44,8 +44,10 @@ Built:
 - `control/`: gates.json GR-1.0 (48 checks = SPEC tables, tested against SPEC.md incl. levels and phases),
   thresholds.json TH-1.0 (D-2..D-10 values), crosswalk.json CW-1.1 (D-1 tier map exactly as the owner's table,
   roll-up, regulators; benefit-group map proposed), disclosure.json DS-1.1 (D-4; four measure placements proposed).
-- `contract/`: Merit contract IP4-8 pinned STRUCTURE-ONLY (descriptions dropped: they name real cedants) by
-  `tools/pin_contract.py`; re-pinned 2026-10-25 from ete-dashboard a350841 (Merit v7.3.2, manifest key contract_version
+- `contract/`: Merit contract pinned STRUCTURE-ONLY (descriptions dropped: they name real cedants) by
+  `tools/pin_contract.py`. **Re-pinned 2026-10-26 to IP4-9** (owner 14:54: "Re-Pin Pricing Workbench and Merit
+  AI") from ete-dashboard 3eaaa30 (Merit v7.5.0; source sha256 6ba0c198...; pinned 7ba05426...). Tables, columns,
+  types and keys are unchanged: only the version moves. See "Merit IP4-9" below. Before: IP4-8, re-pinned 2026-10-25 from ete-dashboard a350841 (Merit v7.3.2, manifest key contract_version
   documented; pinned copy unchanged, 1c71f611...). Synthetic runs now carry contract_version as v7.3.2 runs do
   (`run.py synth --no-stamp` writes pre-v7.3.2 manifests).
 - Strict reading (`meritai/contract.py`): CSV header and rows must parse exactly (no sniffing); any parse failure is
@@ -69,6 +71,20 @@ Built:
 - Independent review (2026-10-25): 1 blocker (crash text leaking raw rows) and 10 majors found; all fixed or
   raised as owner questions below.
 
+Merit IP4-9 (Merit v7.5.0, owner decisions on the Merit Phase 1 Q-list; ete-dashboard
+side_tools/merit/docs/RELEASE_NOTES_v7.5.0.md): the meanings change and the layout does not. Effect here:
+- **G1.1:** a run stamped IP4-8 (Merit v7.4.0 or earlier) is now refused ("this release accepts IP4-9"; fail level
+  Stop). Re-run it on Merit v7.5.0 before pooling (Q11).
+- **CountFlag:** now on a visit's first paid line when the visit's net paid is above zero. Counts per cell do not
+  change. A count cut by a line attribute (provider or claim type) can.
+- **PolicyTypeUsed:** where Merit calculates the type, it is now "SME" or "Group" (one rule: lives in force at
+  inception below SME max lives, default 200). It was "SME" / "Non-SME". Supplied policy types pass through as before.
+- **UltimateAmount / ultimates:** for a TPA with an expected loss ratio in Merit's Run settings, the lag-0 month is
+  Bornhuetter-Ferguson (Method starts "BF:"). Those months have completion factors around 0.4-0.6, below the
+  0.80 maturity threshold, so SPEC's maturity control already keeps them out of calibration. In monitoring they
+  carry an assumed loss ratio, not a development estimate (Q11).
+- **Synthetic runs:** stamped IP4-9 (the generator writes the pinned version).
+
 Open questions for the owner (defaults in use):
 | # | Question | In use |
 | --- | --- | --- |
@@ -82,6 +98,7 @@ Open questions for the owner (defaults in use):
 | Q8 | G1.2 tolerance for the member-month fan-out: 0.01 (Merit manual 3.13 "0 within rounding, < 0.01")? | 0.01 |
 | Q9 | Disclosure class for trend rates, completion factors and provider / diagnosis indices: loss-cost (3 / 50% / 500 LY)? | Loss-cost (proposed) |
 | Q10 | Merit change request bundle | (a) done in v7.3.2; nothing else open |
+| Q11 | Merit v7.5.0 (IP4-9): (a) a Merit v7.4.0 run (IP4-8): re-run on v7.5.0 before pooling, or accept with a signed Flag? (b) BF lag-0 ultimates in monitoring: label them as assumption-based (Method "BF:"), or leave them with the other immature months? | (a) G1.1 refuses IP4-8 (Stop). (b) Treated as immature months, no label |
 
 ## Next step
 1. Done 2026-10-25 18:05: repository mtamsyed-gc/merit-ai created; main = e1c9429 (P1).
