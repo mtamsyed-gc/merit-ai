@@ -9,8 +9,8 @@ from helpers import copy_run, done, ok, pack, tmpdir
 from meritai import contract as K
 
 pin, c = K.load_pin()
-ok(pin["version"] == "IP4-9" and c["version"] == "IP4-9", "pinned contract IP4-9 (Merit v7.5.0) loads, hash verified")
-ok(pin["source_commit"].startswith("3eaaa30"), "pinned from ete-dashboard 3eaaa30 (Merit v7.5.0)")
+ok(pin["version"] == "IP4-11" and c["version"] == "IP4-11", "pinned contract IP4-11 (Merit v7.8.2) loads, hash verified")
+ok(pin["source_commit"].startswith("0fa7e5b"), "pinned from ete-dashboard 0fa7e5b (Merit v7.8.2)")
 ok(set(K.MAIN_TABLES) <= set(c["tables"]), "contract holds the five main tables")
 
 # tampered contract is refused

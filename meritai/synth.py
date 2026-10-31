@@ -534,6 +534,14 @@ def generate(out_dir, plant=None, seed=None, scale=0.1, stamp_contract=True, pro
                                     "Source": "synthetic truth", "Credible": 1, "Cohorts": "", "Claims": ""})
         cfsel = pd.DataFrame(cfs)
 
+        # Contract IP4-10 scope register columns. A synthetic run has no scope rules, so it carries the values Merit
+        # writes without rules: every main-table row In scope, no rule applied, no claimant cap (capped = payer share).
+        for df in (dim, fmm, fc):
+            df["ScopeStatus"] = "In scope"
+            df["ScopeRule"] = ""
+        fc["PayerShareCapped"] = fc["PayerShare"]
+        fc["PayerShareExcess"] = 0.0
+
         run = out_dir / code / "04_Outputs" / "csv"
         _write(dim, run / "dim_life.csv", cols["dim_life"])
         _write(fmm, run / "fact_member_month.csv", cols["fact_member_month"])

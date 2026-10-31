@@ -2,10 +2,10 @@
  "_note": "Structure-only copy of Merit's output contract (descriptions dropped: they name real cedants). Merit AI accepts only this version. A Merit release that changes the contract needs a change request here: re-run tools/pin_contract.py, re-run the tests.",
  "source_repo": "mtamsyed-gc/ete-dashboard",
  "source_path": "side_tools/merit/config/model_contract.json",
- "source_commit": "3eaaa3069defec5b195a7000351a8fd771e23175",
- "source_sha256": "6ba0c198e1654be43905ac3d611f30f53727eeec65624f379fb0dcd71276abee",
- "pinned_on": "2026-10-26",
- "version": "IP4-9",
- "sha256": "7ba05426f929912434d3be9825c8721e41ac46a4cc44b7546ef70246ef39ccee",
+ "source_commit": "0fa7e5b28f39c968275a0fb8de4f3d540573c1bb",
+ "source_sha256": "ee20699ec74d0804d2905704b93eeeea5e2ba02c33698e6f714daa9ba0339f71",
+ "pinned_on": "2026-10-31",
+ "version": "IP4-11",
+ "sha256": "ea876ad47ab7c226e89560943e258f1a73a539151203fc95cd916998d7545213",
  "file": "merit_model_contract.json"
 }
