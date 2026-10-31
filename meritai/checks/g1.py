@@ -41,7 +41,7 @@ def g1_1(ctx):
     if not values:
         lvl = th["contract_version_missing_level"].upper()
         return Result("G1.1", lvl, f"schema matches contract {pin['version']}; {note}; the run carries no "
-                                   f"contract_version stamp (Merit does not write one yet)",
+                                   f"contract_version stamp (written by Merit v7.3.2 and later; this run predates it)",
                       value="not stamped", threshold=pin["version"], details=details)
     return Result("G1.1", "PASS", f"contract {pin['version']}; {note}", value=values[0], threshold=pin["version"],
                   details=details)

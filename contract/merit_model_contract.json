@@ -56,6 +56,49 @@
    ],
    "optional": true
   },
+  "diagnostics": {
+   "columns": [
+    [
+     "Code",
+     "text"
+    ],
+    [
+     "Severity",
+     "text"
+    ],
+    [
+     "Side",
+     "text"
+    ],
+    [
+     "TPA",
+     "text"
+    ],
+    [
+     "UWY",
+     "text"
+    ],
+    [
+     "Rows",
+     "double"
+    ],
+    [
+     "Amount",
+     "double"
+    ],
+    [
+     "Share",
+     "double"
+    ],
+    [
+     "Message",
+     "text"
+    ]
+   ],
+   "files": "diagnostics.csv",
+   "grain": "finding: Code x Side x TPA x UWY (counts and amounts only)",
+   "optional": true
+  },
   "dim_life": {
    "columns": [
     [
@@ -305,6 +348,14 @@
     [
      "Distribution",
      "text"
+    ],
+    [
+     "ScopeStatus",
+     "text"
+    ],
+    [
+     "ScopeRule",
+     "text"
     ]
    ],
    "grain": "life-period: Payer|TPA|policy|member x UWY",
@@ -312,6 +363,433 @@
     "LifeKey",
     "UWY"
    ]
+  },
+  "dim_life_excluded": {
+   "columns": [
+    [
+     "LifeID",
+     "int"
+    ],
+    [
+     "LifeKey",
+     "text"
+    ],
+    [
+     "Payer Name",
+     "text"
+    ],
+    [
+     "Risk Carrier",
+     "text"
+    ],
+    [
+     "MasterCedantName",
+     "text"
+    ],
+    [
+     "TPA",
+     "text"
+    ],
+    [
+     "PolKey",
+     "text"
+    ],
+    [
+     "MemKey",
+     "text"
+    ],
+    [
+     "UWY",
+     "int"
+    ],
+    [
+     "PolicyStart",
+     "date"
+    ],
+    [
+     "PolicyEndAdj",
+     "date"
+    ],
+    [
+     "AnnualBasisDays",
+     "int"
+    ],
+    [
+     "CovStart",
+     "date"
+    ],
+    [
+     "CovEnd",
+     "date"
+    ],
+    [
+     "Periods",
+     "int"
+    ],
+    [
+     "CovDays",
+     "int"
+    ],
+    [
+     "EarnedDays",
+     "int"
+    ],
+    [
+     "ZP_Gross",
+     "int"
+    ],
+    [
+     "ZP_Net",
+     "int"
+    ],
+    [
+     "WrittenLY_Gross",
+     "double"
+    ],
+    [
+     "WrittenLY_Net",
+     "double"
+    ],
+    [
+     "EarnedLY_Gross",
+     "double"
+    ],
+    [
+     "EarnedLY_Net",
+     "double"
+    ],
+    [
+     "WrittenPrem_Gross",
+     "double"
+    ],
+    [
+     "WrittenPrem_Net",
+     "double"
+    ],
+    [
+     "EarnedPrem_Gross",
+     "double"
+    ],
+    [
+     "EarnedPrem_Net",
+     "double"
+    ],
+    [
+     "RI Name",
+     "text"
+    ],
+    [
+     "Policy Type",
+     "text"
+    ],
+    [
+     "PolicyTypeUsed",
+     "text"
+    ],
+    [
+     "PolicyTypeSource",
+     "text"
+    ],
+    [
+     "Master Contract ID",
+     "text"
+    ],
+    [
+     "Contract Name",
+     "text"
+    ],
+    [
+     "Relation",
+     "text"
+    ],
+    [
+     "Gender",
+     "text"
+    ],
+    [
+     "Marital Status",
+     "text"
+    ],
+    [
+     "Nationality",
+     "text"
+    ],
+    [
+     "Region",
+     "text"
+    ],
+    [
+     "Network",
+     "text"
+    ],
+    [
+     "Plan / Category",
+     "text"
+    ],
+    [
+     "Member DOB",
+     "date"
+    ],
+    [
+     "AgeAtInception",
+     "int"
+    ],
+    [
+     "AgeBand",
+     "text"
+    ],
+    [
+     "GroupSize",
+     "int"
+    ],
+    [
+     "GroupSizeBand",
+     "text"
+    ],
+    [
+     "NewRenewal",
+     "text"
+    ],
+    [
+     "NewRenewalSource",
+     "text"
+    ],
+    [
+     "Joiner",
+     "int"
+    ],
+    [
+     "Leaver",
+     "int"
+    ],
+    [
+     "Tenure",
+     "int"
+    ],
+    [
+     "Currency",
+     "text"
+    ],
+    [
+     "Country",
+     "text"
+    ],
+    [
+     "EndoGroup",
+     "text"
+    ],
+    [
+     "EndoPath",
+     "text"
+    ],
+    [
+     "VoidPeriods",
+     "int"
+    ],
+    [
+     "OverlapVoidPeriods",
+     "int"
+    ],
+    [
+     "ReinstatedPeriods",
+     "int"
+    ],
+    [
+     "MemberReactPeriods",
+     "int"
+    ],
+    [
+     "Region Group",
+     "text"
+    ],
+    [
+     "Nationality Group",
+     "text"
+    ],
+    [
+     "Gender Group",
+     "text"
+    ],
+    [
+     "Distribution",
+     "text"
+    ],
+    [
+     "ScopeStatus",
+     "text"
+    ],
+    [
+     "ScopeRule",
+     "text"
+    ]
+   ],
+   "grain": "life-period: Payer|TPA|policy|member x UWY (excluded by the scope register)",
+   "key": [
+    "LifeKey",
+    "UWY"
+   ],
+   "optional": true
+  },
+  "dq_quarantine": {
+   "columns": [
+    [
+     "Code",
+     "text"
+    ],
+    [
+     "Rule",
+     "text"
+    ],
+    [
+     "Side",
+     "text"
+    ],
+    [
+     "TPA",
+     "text"
+    ],
+    [
+     "UWY",
+     "text"
+    ],
+    [
+     "SourceFile",
+     "text"
+    ],
+    [
+     "SourceRow",
+     "int"
+    ],
+    [
+     "Field",
+     "text"
+    ],
+    [
+     "AmountField",
+     "text"
+    ],
+    [
+     "Amount",
+     "double"
+    ]
+   ],
+   "files": "dq_quarantine.csv",
+   "grain": "quarantined source row x failed rule (no identifiers)",
+   "optional": true
+  },
+  "dq_recon_control": {
+   "columns": [
+    [
+     "Payer",
+     "text"
+    ],
+    [
+     "TPA",
+     "text"
+    ],
+    [
+     "Side",
+     "text"
+    ],
+    [
+     "Measure",
+     "text"
+    ],
+    [
+     "PeriodBasis",
+     "text"
+    ],
+    [
+     "Period",
+     "text"
+    ],
+    [
+     "Control",
+     "double"
+    ],
+    [
+     "Merit",
+     "double"
+    ],
+    [
+     "Difference",
+     "double"
+    ],
+    [
+     "DifferencePct",
+     "double"
+    ],
+    [
+     "Source",
+     "text"
+    ],
+    [
+     "AsAt",
+     "text"
+    ],
+    [
+     "Status",
+     "text"
+    ]
+   ],
+   "files": "dq_recon_control.csv",
+   "grain": "control total: Payer x TPA x Side x Measure x Period",
+   "optional": true
+  },
+  "dq_recon_scope": {
+   "columns": [
+    [
+     "Side",
+     "text"
+    ],
+    [
+     "TPA",
+     "text"
+    ],
+    [
+     "UWY",
+     "text"
+    ],
+    [
+     "Measure",
+     "text"
+    ],
+    [
+     "Read",
+     "double"
+    ],
+    [
+     "InScope",
+     "double"
+    ],
+    [
+     "Excluded",
+     "double"
+    ],
+    [
+     "Quarantined",
+     "double"
+    ],
+    [
+     "Duplicates",
+     "double"
+    ],
+    [
+     "CarvedOut",
+     "double"
+    ],
+    [
+     "Difference",
+     "double"
+    ],
+    [
+     "Status",
+     "text"
+    ]
+   ],
+   "files": "dq_recon_scope.csv",
+   "grain": "Side x TPA x UWY ('(all)' = every year) x Measure (rows / amount)",
+   "optional": true
   },
   "exceptions": {
    "columns": [
@@ -567,9 +1045,270 @@
     [
      "UltimateCount_IBNP",
      "double"
+    ],
+    [
+     "ScopeStatus",
+     "text"
+    ],
+    [
+     "ScopeRule",
+     "text"
+    ],
+    [
+     "PayerShareCapped",
+     "double"
+    ],
+    [
+     "PayerShareExcess",
+     "double"
     ]
    ],
    "grain": "claim line (reversals netted within ClaimID upstream or kept as lines; sums are additive)",
+   "key": [
+    "ClaimKey"
+   ],
+   "optional": true
+  },
+  "fact_claims_excluded": {
+   "columns": [
+    [
+     "ClaimKey",
+     "text"
+    ],
+    [
+     "Payer Name",
+     "text"
+    ],
+    [
+     "TPA",
+     "text"
+    ],
+    [
+     "UWY",
+     "int"
+    ],
+    [
+     "LifeKey",
+     "text"
+    ],
+    [
+     "LifeID",
+     "int"
+    ],
+    [
+     "PolKey",
+     "text"
+    ],
+    [
+     "MemKey",
+     "text"
+    ],
+    [
+     "ClaimID",
+     "text"
+    ],
+    [
+     "ClaimantKey",
+     "text"
+    ],
+    [
+     "MatchTier",
+     "text"
+    ],
+    [
+     "MatchStatus",
+     "text"
+    ],
+    [
+     "InCover",
+     "int"
+    ],
+    [
+     "InExperience",
+     "int"
+    ],
+    [
+     "StatusClass",
+     "text"
+    ],
+    [
+     "Claim Type",
+     "text"
+    ],
+    [
+     "FOB",
+     "text"
+    ],
+    [
+     "FOC",
+     "text"
+    ],
+    [
+     "ICD Code",
+     "text"
+    ],
+    [
+     "ICD Description",
+     "text"
+    ],
+    [
+     "ICD Chapter",
+     "text"
+    ],
+    [
+     "Provider Name",
+     "text"
+    ],
+    [
+     "Provider Type",
+     "text"
+    ],
+    [
+     "Provider Region",
+     "text"
+    ],
+    [
+     "TreatmentDate",
+     "date"
+    ],
+    [
+     "IncurredMonth",
+     "date"
+    ],
+    [
+     "ReportedMonth",
+     "date"
+    ],
+    [
+     "PaidMonth",
+     "date"
+    ],
+    [
+     "RepLag",
+     "int"
+    ],
+    [
+     "PaidLag",
+     "int"
+    ],
+    [
+     "Claimed",
+     "double"
+    ],
+    [
+     "Declined",
+     "double"
+    ],
+    [
+     "Discounts",
+     "double"
+    ],
+    [
+     "Approved",
+     "double"
+    ],
+    [
+     "BeneficiaryShare",
+     "double"
+    ],
+    [
+     "PayerShare",
+     "double"
+    ],
+    [
+     "Paid",
+     "double"
+    ],
+    [
+     "OS",
+     "double"
+    ],
+    [
+     "CountFlag",
+     "int"
+    ],
+    [
+     "LargeFlag",
+     "int"
+    ],
+    [
+     "SrcOrder",
+     "int"
+    ],
+    [
+     "MasterCedantName",
+     "text"
+    ],
+    [
+     "RI Name",
+     "text"
+    ],
+    [
+     "DevLag",
+     "int"
+    ],
+    [
+     "CF_Basis",
+     "text"
+    ],
+    [
+     "CF_Amount",
+     "double"
+    ],
+    [
+     "CF_Count",
+     "double"
+    ],
+    [
+     "UltimateAmount",
+     "double"
+    ],
+    [
+     "UltimateCount",
+     "double"
+    ],
+    [
+     "Provider Region Group",
+     "text"
+    ],
+    [
+     "CF_Basis_IBNP",
+     "text"
+    ],
+    [
+     "CF_Amount_IBNP",
+     "double"
+    ],
+    [
+     "CF_Count_IBNP",
+     "double"
+    ],
+    [
+     "UltimateAmount_IBNP",
+     "double"
+    ],
+    [
+     "UltimateCount_IBNP",
+     "double"
+    ],
+    [
+     "ScopeStatus",
+     "text"
+    ],
+    [
+     "ScopeRule",
+     "text"
+    ],
+    [
+     "PayerShareCapped",
+     "double"
+    ],
+    [
+     "PayerShareExcess",
+     "double"
+    ]
+   ],
+   "grain": "claim line (reversals netted within ClaimID upstream or kept as lines; sums are additive) (excluded by the scope register)",
    "key": [
     "ClaimKey"
    ],
@@ -636,6 +1375,14 @@
     [
      "WrittenLY_Net",
      "double"
+    ],
+    [
+     "ScopeStatus",
+     "text"
+    ],
+    [
+     "ScopeRule",
+     "text"
     ]
    ],
    "grain": "life-period x calendar month",
@@ -644,6 +1391,85 @@
     "UWY",
     "MonthStart"
    ]
+  },
+  "fact_member_month_excluded": {
+   "columns": [
+    [
+     "LifeID",
+     "int"
+    ],
+    [
+     "LifeKey",
+     "text"
+    ],
+    [
+     "UWY",
+     "int"
+    ],
+    [
+     "Payer Name",
+     "text"
+    ],
+    [
+     "TPA",
+     "text"
+    ],
+    [
+     "MonthStart",
+     "date"
+    ],
+    [
+     "EarnedDays",
+     "int"
+    ],
+    [
+     "EarnedLY_Gross",
+     "double"
+    ],
+    [
+     "EarnedLY_Net",
+     "double"
+    ],
+    [
+     "EarnedPrem_Gross",
+     "double"
+    ],
+    [
+     "EarnedPrem_Net",
+     "double"
+    ],
+    [
+     "WrittenPrem_Gross",
+     "double"
+    ],
+    [
+     "WrittenPrem_Net",
+     "double"
+    ],
+    [
+     "WrittenLY_Gross",
+     "double"
+    ],
+    [
+     "WrittenLY_Net",
+     "double"
+    ],
+    [
+     "ScopeStatus",
+     "text"
+    ],
+    [
+     "ScopeRule",
+     "text"
+    ]
+   ],
+   "grain": "life-period x calendar month (excluded by the scope register)",
+   "key": [
+    "LifeKey",
+    "UWY",
+    "MonthStart"
+   ],
+   "optional": true
   },
   "recon": {
    "files": "recon_*.csv"
@@ -660,6 +1486,34 @@
     ]
    ],
    "files": "run_manifest*.csv"
+  },
+  "scope_tags": {
+   "columns": [
+    [
+     "LifeID",
+     "int"
+    ],
+    [
+     "ClaimID",
+     "text"
+    ],
+    [
+     "Tag",
+     "text"
+    ],
+    [
+     "ScopeRule",
+     "text"
+    ]
+   ],
+   "grain": "tag x row (a life-period or a claim line) x rule",
+   "key": [
+    "LifeID",
+    "ClaimID",
+    "Tag",
+    "ScopeRule"
+   ],
+   "optional": true
   },
   "ultimates": {
    "columns": [
@@ -766,5 +1620,5 @@
    "optional": true
   }
  },
- "version": "IP4-9"
+ "version": "IP4-11"
 }

@@ -25,7 +25,7 @@ client run. Merit AI only reads Merit's outputs; it never changes Merit.
 | 5 Gate report | Writes `out\selftest_reports\G1_selftest.xlsx` | The report a reviewer reads: one row per check, its result, what it means and what to do |
 
 Expected: every insurer shows **PASS (incomplete)** on G1. The synthetic runs carry Merit's contract version stamp
-(Merit v7.3.2 or later); "incomplete" means the G1 checks of later phases are not built yet.
+(contract IP4-11: Merit v7.7.0 or later); "incomplete" means the G1 checks of later phases are not built yet.
 
 ## Reading a gate report
 
