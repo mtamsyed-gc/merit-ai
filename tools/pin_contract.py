@@ -8,6 +8,7 @@ no cedant names, so it pins a structure-only copy and records the hash of the so
 import datetime as dt
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -16,10 +17,16 @@ OUT = ROOT / "contract"
 KEEP = ("columns", "key", "grain", "optional", "files")
 
 
+ONLY = re.compile(r"^\s*([A-Za-z0-9_]+\.csv) only\b")   # Merit: "exceptions.csv only (v8.0.4): ..."
+
+
 def strip(src):
     out = {"version": src["version"], "tables": {}}
     for t, v in src["tables"].items():
         out["tables"][t] = {k: v[k] for k in KEEP if k in v}
+        only = {c: m.group(1) for c, d in (v.get("describe") or {}).items() if (m := ONLY.match(str(d)))}
+        if only:   # family columns Merit writes to one file of the family only (IP4-12: exceptions amounts)
+            out["tables"][t]["file_only"] = dict(sorted(only.items()))
     return out
 
 

@@ -45,8 +45,11 @@ def load_pin():
     return pin, contract
 
 
-def columns(contract, table):
-    return [(c, t) for c, t in contract["tables"][table].get("columns", [])]
+def columns(contract, table, file_name=None):
+    """Columns of a contract table. For a family file (file_name given), a column the contract marks as written to
+    another file of the family only ('file_only', e.g. exceptions.csv only) is left out."""
+    only = contract["tables"][table].get("file_only", {}) if file_name else {}
+    return [(c, t) for c, t in contract["tables"][table].get("columns", []) if only.get(c, file_name) == file_name]
 
 
 def find_table(run_dir, name):
@@ -183,16 +186,16 @@ def check_schema(run_dir, required=None):
                                    "example": str(e)})
                     continue
                 if contract["tables"][fam].get("columns"):
-                    issues += _table_issues(con, contract, fam, p.stem, have)
+                    issues += _table_issues(con, contract, fam, p.stem, have, file_name=p.name)
     finally:
         con.close()
     return issues
 
 
-def _table_issues(con, contract, ctab, label, have):
+def _table_issues(con, contract, ctab, label, have, file_name=None):
     issues = []
     typed = []
-    for col, typ in columns(contract, ctab):
+    for col, typ in columns(contract, ctab, file_name):
         if col not in have:
             issues.append({"kind": "missing_column", "table": label, "column": col, "count": 1, "example": ""})
         elif typ in TYPE_RX:

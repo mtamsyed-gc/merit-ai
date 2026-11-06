@@ -541,6 +541,15 @@ def generate(out_dir, plant=None, seed=None, scale=0.1, stamp_contract=True, pro
             df["ScopeRule"] = ""
         fc["PayerShareCapped"] = fc["PayerShare"]
         fc["PayerShareExcess"] = 0.0
+        # IP4-12 (Merit v8.0.4): five optional premium fields, blank when not mapped. IP4-13 (v8.0.9): RI shares; a
+        # synthetic payer is on neither 'RI policy shares' nor 'RI treaty shares', which Merit writes as 100% reinsured
+        # policy, no treaty rows (TreatyCededPct and CededPct blank).
+        for i in range(1, 6):
+            dim[f"Opt_{i}"] = ""
+        dim["ReinsuredPct"] = 1.0
+        dim["ReinsuredPctSource"] = "Payer not in the policy table: 100%"
+        dim["TreatyCededPct"] = ""
+        dim["CededPct"] = ""
 
         run = out_dir / code / "04_Outputs" / "csv"
         _write(dim, run / "dim_life.csv", cols["dim_life"])
@@ -588,11 +597,13 @@ def generate(out_dir, plant=None, seed=None, scale=0.1, stamp_contract=True, pro
                       "match_rate_amount", "visits_counted", "ultimate_experience", "excluded_pre_inception",
                       "excluded_unmatched", "excluded_paid", "excluded_paid_os"]
         _write(pd.DataFrame(rc), run / "recon_claims.csv", recon_cols)
-        exc_cols = ["Code", "Severity", "TPA", "PolKey", "MemKey", "SrcOrder", "Message"]
+        exc_cols = [c for c, _ in K.columns(contract, "exceptions", "exceptions.csv")]
+        exc_claims_cols = [c for c, _ in K.columns(contract, "exceptions", "exceptions_claims.csv")]
         _write(pd.DataFrame([{"Code": "W-RI-TREATY", "Severity": "Flag", "TPA": sorted(c["tpas"])[0], "PolKey": "",
-                              "MemKey": "", "SrcOrder": "", "Message": "synthetic: no treaty shares supplied"}]),
+                              "MemKey": "", "SrcOrder": "", "Message": "synthetic: no treaty shares supplied",
+                              "Gross Premium": "", "Net Premium": ""}]),
                run / "exceptions.csv", exc_cols)
-        _write(pd.DataFrame(columns=exc_cols), run / "exceptions_claims.csv", exc_cols)
+        _write(pd.DataFrame(columns=exc_claims_cols), run / "exceptions_claims.csv", exc_claims_cols)
         manp = [("valuation_date", D["valuation_date"]), ("premium_extract_date", D["premium_extract_date"]),
                 ("workflow", "Merit_02_Premium"), ("workflow_version", "SYNTH"), ("default_premium_basis", "Gross"),
                 ("currency", "AED"), ("has_member_dob", "1")]
