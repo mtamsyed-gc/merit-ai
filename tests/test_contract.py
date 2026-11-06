@@ -9,8 +9,11 @@ from helpers import copy_run, done, ok, pack, tmpdir
 from meritai import contract as K
 
 pin, c = K.load_pin()
-ok(pin["version"] == "IP4-11" and c["version"] == "IP4-11", "pinned contract IP4-11 (Merit v7.8.2) loads, hash verified")
-ok(pin["source_commit"].startswith("0fa7e5b"), "pinned from ete-dashboard 0fa7e5b (Merit v7.8.2)")
+ok(pin["version"] == "IP4-13" and c["version"] == "IP4-13", "pinned contract IP4-13 (Merit v8.0.11) loads, hash verified")
+ok(pin["source_commit"].startswith("7ab2c35f"), "pinned from ete-dashboard 7ab2c35f (Merit v8.0.11)")
+ok(c["tables"]["exceptions"].get("file_only") == {"Gross Premium": "exceptions.csv", "Net Premium": "exceptions.csv",
+                                                  "Payer Share": "exceptions_claims.csv"},
+   "per-file exception columns kept from Merit's descriptions (IP4-12)")
 ok(set(K.MAIN_TABLES) <= set(c["tables"]), "contract holds the five main tables")
 
 # tampered contract is refused
@@ -52,4 +55,17 @@ run2 = copy_run(d)
 pd.read_csv(run2 / "csv" / "cf_selected.csv").to_parquet(run2 / "parquet" / "cf_selected.parquet", index=False)
 ok(K.find_table(run2, "cf_selected").suffix == ".parquet", "parquet preferred over csv")
 ok(K.check_schema(run2) == [], "parquet table passes the schema check")
+
+# exceptions family (IP4-12): premium amounts only in exceptions.csv, payer share only in exceptions_claims.csv
+run3 = copy_run(d)
+ok(K.check_schema(run3) == [], "each exceptions file carries only its own amount columns and passes")
+e = run3 / "csv" / "exceptions.csv"
+pd.read_csv(e, dtype=str, keep_default_na=False).drop(columns=["Net Premium"]).to_csv(e, index=False)
+ec = run3 / "csv" / "exceptions_claims.csv"
+pd.read_csv(ec, dtype=str, keep_default_na=False).drop(columns=["Payer Share"]).to_csv(ec, index=False)
+k3 = {(i["kind"], i["table"], i["column"]) for i in K.check_schema(run3)}
+ok(("missing_column", "exceptions", "Net Premium") in k3, "a premium amount missing from exceptions.csv is found")
+ok(("missing_column", "exceptions_claims", "Payer Share") in k3, "payer share missing from exceptions_claims.csv is found")
+ok(not any(i[2] in ("Gross Premium", "Net Premium") and i[1] == "exceptions_claims" for i in k3),
+   "premium amounts are not asked of exceptions_claims.csv")
 done("test_contract")

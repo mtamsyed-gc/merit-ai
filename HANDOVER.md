@@ -1,6 +1,6 @@
 # Handover — Merit AI
 
-Last updated: 2026-10-31 (contract re-pinned to IP4-11 = Merit v7.8.2, ete-dashboard 0fa7e5b, owner's instruction; synthetic runs carry the IP4-10 scope columns. Before: 2026-10-26 (contract re-pinned to IP4-9 = Merit v7.5.0, ete-dashboard 3eaaa30, owner's instruction; before: 2026-10-25 P1 Foundations, re-pin to the Merit v7.3.2 source a350841, synthetic runs stamped).
+Last updated: 2026-11-06 (contract re-pinned to IP4-13 = Merit v8.0.11, ete-dashboard 7ab2c35f, owner's instruction; the pin keeps Merit's per-file exception columns. Before: 2026-10-31 (contract re-pinned to IP4-11 = Merit v7.8.2, ete-dashboard 0fa7e5b, owner's instruction; synthetic runs carry the IP4-10 scope columns. Before: 2026-10-26 (contract re-pinned to IP4-9 = Merit v7.5.0, ete-dashboard 3eaaa30, owner's instruction; before: 2026-10-25 P1 Foundations, re-pin to the Merit v7.3.2 source a350841, synthetic runs stamped).
 
 Read this, then CLAUDE.md, then the SPEC.md sections the task names.
 
@@ -45,7 +45,7 @@ Built:
   thresholds.json TH-1.0 (D-2..D-10 values), crosswalk.json CW-1.1 (D-1 tier map exactly as the owner's table,
   roll-up, regulators; benefit-group map proposed), disclosure.json DS-1.1 (D-4; four measure placements proposed).
 - `contract/`: Merit contract pinned STRUCTURE-ONLY (descriptions dropped: they name real cedants) by
-  `tools/pin_contract.py`. **Re-pinned 2026-10-31 to IP4-11** (owner: "Pin latest IP4 to Merit AI and Pricing Workbench") from ete-dashboard 0fa7e5b (Merit v7.8.2; source sha256 ee20699e...; pinned ea876ad4...). See "Merit IP4-11" below. Before: **re-pinned 2026-10-26 to IP4-9** (owner 14:54: "Re-Pin Pricing Workbench and Merit
+  `tools/pin_contract.py`. **Re-pinned 2026-11-06 to IP4-13** (owner: "do the two re-pins and the kit rebuild in one go, without that rule change") from ete-dashboard 7ab2c35f (Merit v8.0.11; source sha256 of the contract file in PIN.json). See "Merit IP4-13" below. Before: **re-pinned 2026-10-31 to IP4-11** (owner: "Pin latest IP4 to Merit AI and Pricing Workbench") from ete-dashboard 0fa7e5b (Merit v7.8.2; source sha256 ee20699e...; pinned ea876ad4...). See "Merit IP4-11" below. Before: **re-pinned 2026-10-26 to IP4-9** (owner 14:54: "Re-Pin Pricing Workbench and Merit
   AI") from ete-dashboard 3eaaa30 (Merit v7.5.0; source sha256 6ba0c198...; pinned 7ba05426...). Tables, columns,
   types and keys are unchanged: only the version moves. See "Merit IP4-9" below. Before: IP4-8, re-pinned 2026-10-25 from ete-dashboard a350841 (Merit v7.3.2, manifest key contract_version
   documented; pinned copy unchanged, 1c71f611...). Synthetic runs now carry contract_version as v7.3.2 runs do
@@ -70,6 +70,26 @@ Built:
   policyholder spread). Ran on exactly the pinned package versions (Python 3.13 in the build container).
 - Independent review (2026-10-25): 1 blocker (crash text leaking raw rows) and 10 majors found; all fixed or
   raised as owner questions below.
+
+Merit IP4-13 (Merit v8.0.9 onwards; current Merit v8.0.11; ete-dashboard side_tools/merit/docs/RELEASE_NOTES_v8.0.4.md
+and RELEASE_NOTES_v8.0.9.md). Both steps since IP4-11 are additive: no table or column removed or renamed.
+- **IP4-12 (Merit v8.0.4):** dim_life (and its twin) gain Opt_1 .. Opt_5, optional premium fields as supplied (blank when
+  not mapped); the exceptions family gains amounts: Gross Premium and Net Premium in exceptions.csv only, Payer Share in
+  exceptions_claims.csv only (Merit's own column descriptions say so). A secondary member identifier is used inside
+  Merit's intake only and never reaches the outputs.
+- **IP4-13 (Merit v8.0.9):** dim_life gains ReinsuredPct, ReinsuredPctSource, TreatyCededPct, CededPct (the RI shares
+  from the inputs workbook). Pooling reads gross experience, so nothing here uses them yet.
+- **Per-file exception columns:** `tools/pin_contract.py` now keeps, per family table, the columns Merit marks as written
+  to one file only (`file_only`, read from Merit's description "<file>.csv only"), and the schema check asks each family
+  file only for its own columns. Without this every real IP4-13 run would fail G1.1 on a "missing column". Checked on
+  Merit's reference outputs (oracle on synth/raw, v8.0.11): exceptions files pass. The same run shows five columns Merit
+  writes but its contract does not list (WrittenPrem_GrossNet, EarnedPrem_GrossNet, WrittenFee_Admin / _TPA / _Broker,
+  since Merit v7.0.0): G1.1 reports them as extra and ignores them, as before.
+- **G1.1:** a run stamped IP4-11 or IP4-12 (Merit v7.7.0 to v8.0.8) is now refused (Stop). Re-run it on Merit v8.0.9 or
+  later before pooling (Q13).
+- **Synthetic runs:** stamped IP4-13; Opt_1 .. Opt_5 blank; ReinsuredPct 1 with source "Payer not in the policy table:
+  100%" and TreatyCededPct / CededPct blank (a payer on neither RI tab, as Merit writes it); exception amounts in their own
+  files.
 
 Merit IP4-11 (Merit v7.7.0 onwards; current Merit v7.8.2; ete-dashboard side_tools/merit/docs/RELEASE_NOTES_v7.6.0.md
 and RELEASE_NOTES_v7.7.0.md). Both steps since IP4-9 are additive: no table or column is removed or renamed.
@@ -114,6 +134,7 @@ Open questions for the owner (defaults in use):
 | Q8 | G1.2 tolerance for the member-month fan-out: 0.01 (Merit manual 3.13 "0 within rounding, < 0.01")? | 0.01 |
 | Q9 | Disclosure class for trend rates, completion factors and provider / diagnosis indices: loss-cost (3 / 50% / 500 LY)? | Loss-cost (proposed) |
 | Q10 | Merit change request bundle | (a) done in v7.3.2; nothing else open |
+| Q13 | Merit IP4-13 (2026-11-06): a run stamped IP4-11 or IP4-12 (Merit v7.7.0 to v8.0.8): re-run on Merit v8.0.9+ before pooling, or accept with a signed Flag? | G1.1 refuses them (Stop) |
 | Q12 | Merit IP4-11 (2026-10-31): (a) a run stamped IP4-9 or IP4-10: re-run on Merit v7.7.0+ before pooling, or accept with a signed Flag? (b) should the pool see business a cedant's scope register EXCLUDEs (the *_excluded twins), or the CAP excess (PayerShareExcess), or only the main tables as written? | (a) G1.1 refuses them (Stop). (b) Main tables only |
 | Q11 | Merit v7.5.0 (IP4-9): (a) a Merit v7.4.0 run (IP4-8): re-run on v7.5.0 before pooling, or accept with a signed Flag? (b) BF lag-0 ultimates in monitoring: label them as assumption-based (Method "BF:"), or leave them with the other immature months? | (a) G1.1 refuses IP4-8 (Stop). (b) Treated as immature months, no label |
 
