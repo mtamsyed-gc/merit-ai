@@ -87,7 +87,7 @@ steps since IP4-11 are additive: no table or column is removed or renamed.
   list has to decide whether they enter the pool at all (Q13).
 - **Synthetic runs:** stamped IP4-13; Opt_1..Opt_5 blank; ReinsuredPct 1 with source "Payer not in the policy table:
   100%", TreatyCededPct and CededPct blank (what Merit writes with no RI tabs); exception amounts blank.
-- Tests: 6 suites pass (21 G1.1 and 20 G1.4 fail-on-purpose cases) on the pinned packages, Python 3.13.
+- Tests: 6 suites pass (22 G1.1 and 20 G1.4 fail-on-purpose cases) on the pinned packages, Python 3.13.
 
 Merit IP4-11 (Merit v7.7.0 onwards; current Merit v7.8.2; ete-dashboard side_tools/merit/docs/RELEASE_NOTES_v7.6.0.md
 and RELEASE_NOTES_v7.7.0.md). Both steps since IP4-9 are additive: no table or column is removed or renamed.
