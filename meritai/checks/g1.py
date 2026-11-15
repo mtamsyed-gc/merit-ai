@@ -56,7 +56,7 @@ def _tables(run):
 
 def _known_columns(contract, table):
     key = table if table in K.MAIN_TABLES else next((f for f in K.FAMILIES if table.startswith(f)), None)
-    return {c for c, _ in K.columns(contract, key)} if key else set()
+    return {c for c, _ in K.columns(contract, key, table)} if key else set()
 
 
 @check("G1.4")

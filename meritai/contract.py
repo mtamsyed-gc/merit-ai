@@ -19,6 +19,11 @@ from . import ROOT
 CONTRACT_DIR = ROOT / "contract"
 MAIN_TABLES = ["dim_life", "fact_member_month", "fact_claims", "cf_selected", "ultimates"]
 FAMILIES = {"recon": "recon_*.csv", "exceptions": "exceptions*.csv", "run_manifest": "run_manifest*.csv"}
+# Contract columns that one file of a family carries and the others do not (Merit IP4-12, TPA_RULES 93.6: the
+# contract lists the three amounts under "exceptions"; Merit writes Gross Premium and Net Premium in exceptions.csv
+# and Payer Share in exceptions_claims.csv). column -> the file stems that carry it.
+FILE_COLUMNS = {"exceptions": {"Gross Premium": ("exceptions",), "Net Premium": ("exceptions",),
+                               "Payer Share": ("exceptions_claims",)}}
 # strict text forms of the contract types (the contract: dates yyyy-mm-dd, '.' decimal, no thousands separator)
 TYPE_RX = {"int": r"^-?[0-9]+$",
            "double": r"^-?([0-9]+(\.[0-9]*)?|\.[0-9]+)([eE][-+]?[0-9]+)?$",
@@ -45,8 +50,10 @@ def load_pin():
     return pin, contract
 
 
-def columns(contract, table):
-    return [(c, t) for c, t in contract["tables"][table].get("columns", [])]
+def columns(contract, table, label=None):
+    """Contract columns of a table; label = the file's stem, for a family whose files differ (FILE_COLUMNS)."""
+    only = FILE_COLUMNS.get(table, {}) if label is not None else {}
+    return [(c, t) for c, t in contract["tables"][table].get("columns", []) if label in only.get(c, (label,))]
 
 
 def find_table(run_dir, name):
@@ -192,13 +199,13 @@ def check_schema(run_dir, required=None):
 def _table_issues(con, contract, ctab, label, have):
     issues = []
     typed = []
-    for col, typ in columns(contract, ctab):
+    for col, typ in columns(contract, ctab, label):
         if col not in have:
             issues.append({"kind": "missing_column", "table": label, "column": col, "count": 1, "example": ""})
         elif typ in TYPE_RX:
             typed.append((col, typ))
     issues += _type_issues(con, label, typed)
-    known = {c for c, _ in columns(contract, ctab)}
+    known = {c for c, _ in columns(contract, ctab, label)}
     for i, col in enumerate(have, 1):
         if col not in known:
             issues.append({"kind": "extra_column", "table": label, "column": f"(column {i})", "count": 1,

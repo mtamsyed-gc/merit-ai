@@ -350,6 +350,42 @@
      "text"
     ],
     [
+     "Opt_1",
+     "text"
+    ],
+    [
+     "Opt_2",
+     "text"
+    ],
+    [
+     "Opt_3",
+     "text"
+    ],
+    [
+     "Opt_4",
+     "text"
+    ],
+    [
+     "Opt_5",
+     "text"
+    ],
+    [
+     "ReinsuredPct",
+     "double"
+    ],
+    [
+     "ReinsuredPctSource",
+     "text"
+    ],
+    [
+     "TreatyCededPct",
+     "double"
+    ],
+    [
+     "CededPct",
+     "double"
+    ],
+    [
      "ScopeStatus",
      "text"
     ],
@@ -615,6 +651,42 @@
      "text"
     ],
     [
+     "Opt_1",
+     "text"
+    ],
+    [
+     "Opt_2",
+     "text"
+    ],
+    [
+     "Opt_3",
+     "text"
+    ],
+    [
+     "Opt_4",
+     "text"
+    ],
+    [
+     "Opt_5",
+     "text"
+    ],
+    [
+     "ReinsuredPct",
+     "double"
+    ],
+    [
+     "ReinsuredPctSource",
+     "text"
+    ],
+    [
+     "TreatyCededPct",
+     "double"
+    ],
+    [
+     "CededPct",
+     "double"
+    ],
+    [
      "ScopeStatus",
      "text"
     ],
@@ -820,6 +892,18 @@
     [
      "Message",
      "text"
+    ],
+    [
+     "Gross Premium",
+     "double"
+    ],
+    [
+     "Net Premium",
+     "double"
+    ],
+    [
+     "Payer Share",
+     "double"
     ]
    ],
    "files": "exceptions*.csv"
@@ -1620,5 +1704,5 @@
    "optional": true
   }
  },
- "version": "IP4-11"
+ "version": "IP4-13"
 }

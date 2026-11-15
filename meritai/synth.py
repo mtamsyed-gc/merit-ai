@@ -541,6 +541,14 @@ def generate(out_dir, plant=None, seed=None, scale=0.1, stamp_contract=True, pro
             df["ScopeRule"] = ""
         fc["PayerShareCapped"] = fc["PayerShare"]
         fc["PayerShareExcess"] = 0.0
+        # Contract IP4-12 optional fields and IP4-13 reinsured shares. A synthetic run maps no optional field (blank)
+        # and has no RI policy or treaty tabs: Merit then writes 100% reinsured for the payer and no treaty share.
+        for i in range(1, 6):
+            dim[f"Opt_{i}"] = ""
+        dim["ReinsuredPct"] = 1.0
+        dim["ReinsuredPctSource"] = "Payer not in the policy table: 100%"
+        dim["TreatyCededPct"] = ""
+        dim["CededPct"] = ""
 
         run = out_dir / code / "04_Outputs" / "csv"
         _write(dim, run / "dim_life.csv", cols["dim_life"])
@@ -590,9 +598,11 @@ def generate(out_dir, plant=None, seed=None, scale=0.1, stamp_contract=True, pro
         _write(pd.DataFrame(rc), run / "recon_claims.csv", recon_cols)
         exc_cols = ["Code", "Severity", "TPA", "PolKey", "MemKey", "SrcOrder", "Message"]
         _write(pd.DataFrame([{"Code": "W-RI-TREATY", "Severity": "Flag", "TPA": sorted(c["tpas"])[0], "PolKey": "",
-                              "MemKey": "", "SrcOrder": "", "Message": "synthetic: no treaty shares supplied"}]),
-               run / "exceptions.csv", exc_cols)
-        _write(pd.DataFrame(columns=exc_cols), run / "exceptions_claims.csv", exc_cols)
+                              "MemKey": "", "SrcOrder": "", "Message": "synthetic: no treaty shares supplied",
+                              "Gross Premium": "", "Net Premium": ""}]),
+               run / "exceptions.csv", exc_cols + ["Gross Premium", "Net Premium"])      # IP4-12: a TPA finding
+        _write(pd.DataFrame(columns=exc_cols + ["Payer Share"]), run / "exceptions_claims.csv",
+               exc_cols + ["Payer Share"])
         manp = [("valuation_date", D["valuation_date"]), ("premium_extract_date", D["premium_extract_date"]),
                 ("workflow", "Merit_02_Premium"), ("workflow_version", "SYNTH"), ("default_premium_basis", "Gross"),
                 ("currency", "AED"), ("has_member_dob", "1")]

@@ -9,8 +9,8 @@ from helpers import copy_run, done, ok, pack, tmpdir
 from meritai import contract as K
 
 pin, c = K.load_pin()
-ok(pin["version"] == "IP4-11" and c["version"] == "IP4-11", "pinned contract IP4-11 (Merit v7.8.2) loads, hash verified")
-ok(pin["source_commit"].startswith("0fa7e5b"), "pinned from ete-dashboard 0fa7e5b (Merit v7.8.2)")
+ok(pin["version"] == "IP4-13" and c["version"] == "IP4-13", "pinned contract IP4-13 (Merit v10.7.0) loads, hash verified")
+ok(pin["source_commit"].startswith("52da4ce"), "pinned from ete-dashboard 52da4ce (Merit v10.7.0)")
 ok(set(K.MAIN_TABLES) <= set(c["tables"]), "contract holds the five main tables")
 
 # tampered contract is refused
@@ -45,6 +45,18 @@ ok(("missing_table", "ultimates", "") in kinds, "missing table found")
 ok(("missing_table", "fact_claims", "") in kinds, "missing claims table found")
 ex = [i for i in K.check_schema(run) if i["kind"] == "type_error"]
 ok(all("20X5" not in i["example"] for i in ex), "values are never copied into issues")
+
+# exceptions family: each file carries its own amount columns (Merit IP4-12, TPA_RULES 93.6)
+names = lambda stem: [c for c, _ in K.columns(c, "exceptions", stem)]  # noqa: E731
+ok("Gross Premium" in names("exceptions") and "Payer Share" not in names("exceptions"),
+   "exceptions.csv: premium amounts, no payer share")
+ok("Payer Share" in names("exceptions_claims") and "Net Premium" not in names("exceptions_claims"),
+   "exceptions_claims.csv: payer share, no premium amounts")
+run3 = copy_run(d)
+p3 = run3 / "csv" / "exceptions_claims.csv"
+pd.read_csv(p3, dtype=str, keep_default_na=False).assign(**{"Gross Premium": ""}).to_csv(p3, index=False)
+k3 = {(i["kind"], i["table"]) for i in K.check_schema(run3)}
+ok(k3 == {("extra_column", "exceptions_claims")}, "a premium amount in exceptions_claims.csv is outside the contract")
 
 # parquet is read first when both exist
 run2 = copy_run(d)
