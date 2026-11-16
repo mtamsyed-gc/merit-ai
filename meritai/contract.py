@@ -50,6 +50,13 @@ def load_pin():
     return pin, contract
 
 
+def one_row(result):
+    """The first row of a result, read to the end. DuckDB 2.0 keeps a result open after fetchone() and refuses the
+    next statement on that connection, so nothing here calls fetchone() (as Merit's engine, merit_native.one_row)."""
+    rows = result.fetchall()
+    return rows[0] if rows else None
+
+
 def columns(contract, table, label=None):
     """Contract columns of a table; label = the file's stem, for a family whose files differ (FILE_COLUMNS)."""
     only = FILE_COLUMNS.get(table, {}) if label is not None else {}
@@ -144,7 +151,7 @@ def _type_issues(con, table, typed):
         if typ == "double":
             bad += f" OR NOT isfinite(TRY_CAST({v} AS DOUBLE))"
         exprs.append(f"count_if({v} IS NOT NULL AND {v} <> '' AND ({bad}))")
-    counts = con.execute(f'SELECT {", ".join(exprs)} FROM "t"').fetchone()
+    counts = one_row(con.execute(f'SELECT {", ".join(exprs)} FROM "t"'))
     for (col, typ), n in zip(typed, counts):
         if n:
             issues.append({"kind": "type_error", "table": table, "column": col, "count": int(n),

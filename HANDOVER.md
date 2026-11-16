@@ -1,6 +1,6 @@
 # Handover — Merit AI
 
-Last updated: 2026-11-15 (contract re-pinned to IP4-13 = Merit v8.0.9 onwards, current Merit v10.7.0, ete-dashboard 52da4ce, owner: "If MeritAI needs contract pinning do that"; synthetic runs carry the IP4-12 / IP4-13 columns; the exceptions files are checked per file. Before: 2026-10-31 (contract re-pinned to IP4-11 = Merit v7.8.2, ete-dashboard 0fa7e5b, owner's instruction; synthetic runs carry the IP4-10 scope columns. Before: 2026-10-26 (contract re-pinned to IP4-9 = Merit v7.5.0, ete-dashboard 3eaaa30, owner's instruction; before: 2026-10-25 P1 Foundations, re-pin to the Merit v7.3.2 source a350841, synthetic runs stamped).
+Last updated: 2026-11-16 (packages aligned with Merit v10: Python 3.14, duckdb 2.0.0, no fetchone(); owner answered Q1, Q8 and Q13(b); thresholds TH-1.1. Before: 2026-11-15 (contract re-pinned to IP4-13 = Merit v8.0.9 onwards, current Merit v10.7.0, ete-dashboard 52da4ce, owner: "If MeritAI needs contract pinning do that"; synthetic runs carry the IP4-12 / IP4-13 columns; the exceptions files are checked per file. Before: 2026-10-31 (contract re-pinned to IP4-11 = Merit v7.8.2, ete-dashboard 0fa7e5b, owner's instruction; synthetic runs carry the IP4-10 scope columns. Before: 2026-10-26 (contract re-pinned to IP4-9 = Merit v7.5.0, ete-dashboard 3eaaa30, owner's instruction; before: 2026-10-25 P1 Foundations, re-pin to the Merit v7.3.2 source a350841, synthetic runs stamped).
 
 Read this, then CLAUDE.md, then the SPEC.md sections the task names.
 
@@ -42,7 +42,7 @@ its own; `launchers\00_Self_test.cmd` runs control -> contract -> synthetic pool
 
 Built:
 - `control/`: gates.json GR-1.0 (48 checks = SPEC tables, tested against SPEC.md incl. levels and phases),
-  thresholds.json TH-1.0 (D-2..D-10 values), crosswalk.json CW-1.1 (D-1 tier map exactly as the owner's table,
+  thresholds.json TH-1.1 (D-2..D-10 values; 2026-11-16: Q1 and Q8 decided), crosswalk.json CW-1.1 (D-1 tier map exactly as the owner's table,
   roll-up, regulators; benefit-group map proposed), disclosure.json DS-1.1 (D-4; four measure placements proposed).
 - `contract/`: Merit contract pinned STRUCTURE-ONLY (descriptions dropped: they name real cedants) by
   `tools/pin_contract.py`. **Re-pinned 2026-11-15 to IP4-13** from ete-dashboard 52da4ce (Merit v10.7.0; source sha256 50ac4cff...; pinned 3c570f28...). See "Merit IP4-13" below. Before: **re-pinned 2026-10-31 to IP4-11** (owner: "Pin latest IP4 to Merit AI and Pricing Workbench") from ete-dashboard 0fa7e5b (Merit v7.8.2; source sha256 ee20699e...; pinned ea876ad4...). See "Merit IP4-11" below. Before: **re-pinned 2026-10-26 to IP4-9** (owner 14:54: "Re-Pin Pricing Workbench and Merit
@@ -70,6 +70,13 @@ Built:
   policyholder spread). Ran on exactly the pinned package versions (Python 3.13 in the build container).
 - Independent review (2026-10-25): 1 blocker (crash text leaking raw rows) and 10 majors found; all fixed or
   raised as owner questions below.
+
+Packages aligned with Merit (2026-11-16, owner: "Align packages with Merit"): requirements.txt duckdb 1.5.6 -> 2.0.0
+and the runtime is CPython 3.14, as Merit v10.0.0 onwards (ete-dashboard requirements-native.txt); every package the
+two share carries Merit's version. The three fetchone() calls became `contract.one_row` (DuckDB 2.0 keeps a result
+open after fetchone(); Merit's rule). No `~`, single-arrow lambda or explicit transaction in the SQL. Tests: 6 suites
+pass on Python 3.14.6 with duckdb 2.0.0 in the cloud. Owner: re-install requirements.txt on the laptop before the
+self-test (duckdb moved).
 
 Merit IP4-13 (Merit v8.0.9 onwards; current Merit v10.7.0; ete-dashboard side_tools/merit TPA_RULES 93 and 98). Both
 steps since IP4-11 are additive: no table or column is removed or renamed.
@@ -122,23 +129,23 @@ side_tools/merit/docs/RELEASE_NOTES_v7.5.0.md): the meanings change and the layo
 Open questions for the owner (defaults in use):
 | # | Question | In use |
 | --- | --- | --- |
-| Q1 | DONE in Merit v7.3.2 (2026-10-25, ete-dashboard a350841): both run manifests carry `contract_version`. Open part: a run from Merit v7.3.1 or earlier (no stamp): re-run on v7.3.2 before pooling (recommended; G1.1 missing-stamp level -> Stop, as SPEC) or accept with a signed Flag? | Missing stamp = FLAG until the owner answers |
+| Q1 | **DECIDED 2026-11-16: a Flag (signed), not a re-run.** DONE in Merit v7.3.2 (2026-10-25, ete-dashboard a350841): both run manifests carry `contract_version`. Open part: a run from Merit v7.3.1 or earlier (no stamp): re-run on v7.3.2 before pooling (recommended; G1.1 missing-stamp level -> Stop, as SPEC) or accept with a signed Flag? | Missing stamp = FLAG (decided) |
 | Q2 | Merit's FOB list has no Pharmacy class. Proposed: Out-Patient lines at a Pharmacy provider = Pharmacy; a TPA with no pharmacy provider type = "OP incl. pharmacy". Also confirm the six group codes and the FOB -> group map | Proposed |
 | Q3 | Merit FOB values outside the six groups (Psychiatry, Alternative Medicine, Wellness & Preventive, Assistance, Other): which group, if any? | Unmapped (G2.3 counts them) |
 | Q4 | Government-funded schemes are excluded (D-1): which Merit field identifies them? | Open |
 | Q5 | Mandatory-basic segment (EBP / Basic): which field or network marks it beyond AAFIYA APN (Enhanced EBP)? | Proposed |
 | Q6 | P1 acceptance says "every gate check fails on purpose". Built in P1: G1.1 and G1.4 (each with its cases); the other 46 are registered and must each add cases when their phase builds them (enforced by test). Accept this reading? | As stated |
 | Q7 | AAFIYA "APN Edge / Essential": one network or two names? | Only the literal name maps |
-| Q8 | G1.2 tolerance for the member-month fan-out: 0.01 (Merit manual 3.13 "0 within rounding, < 0.01")? | 0.01 |
+| Q8 | **DECIDED 2026-11-16: 0.01.** G1.2 tolerance for the member-month fan-out (Merit manual 3.13 "0 within rounding, < 0.01") | 0.01 (decided) |
 | Q9 | Disclosure class for trend rates, completion factors and provider / diagnosis indices: loss-cost (3 / 50% / 500 LY)? | Loss-cost (proposed) |
 | Q10 | Merit change request bundle | (a) done in v7.3.2; nothing else open |
 | Q12 | Merit IP4-11 (2026-10-31): (a) a run stamped IP4-9 or IP4-10: re-run on Merit v7.7.0+ before pooling, or accept with a signed Flag? (b) should the pool see business a cedant's scope register EXCLUDEs (the *_excluded twins), or the CAP excess (PayerShareExcess), or only the main tables as written? | (a) G1.1 refuses them (Stop). (b) Main tables only |
-| Q13 | Merit IP4-13 (2026-11-15): (a) a run stamped IP4-11 or IP4-12: re-run on Merit v8.0.9+ before pooling, or accept with a signed Flag? (b) Opt_1..Opt_5 (raw cedant text): keep them out of the pool (proposed: not on the P2 allowed-column list), or allow named ones? (c) should the pool use the reinsured shares (ReinsuredPct, CededPct) at all, or stay on the 100% basis? | (a) G1.1 refuses them (Stop). (b), (c) Not used; P2 decides |
+| Q13 | Merit IP4-13 (2026-11-15): (a) a run stamped IP4-11 or IP4-12: re-run on Merit v8.0.9+ before pooling, or accept with a signed Flag? (b) Opt_1..Opt_5 (raw cedant text): keep them out of the pool (proposed: not on the P2 allowed-column list), or allow named ones? (c) should the pool use the reinsured shares (ReinsuredPct, CededPct) at all, or stay on the 100% basis? | (a) G1.1 refuses them (Stop). (b) **DECIDED 2026-11-16: kept out of the pool** (not on the P2 allowed-column list; the export drops them). (c) Not used; open |
 | Q11 | Merit v7.5.0 (IP4-9): (a) a Merit v7.4.0 run (IP4-8): re-run on v7.5.0 before pooling, or accept with a signed Flag? (b) BF lag-0 ultimates in monitoring: label them as assumption-based (Method "BF:"), or leave them with the other immature months? | (a) G1.1 refuses IP4-8 (Stop). (b) Treated as immature months, no label |
 
 ## Next step
 1. Done 2026-10-25 18:05: repository mtamsyed-gc/merit-ai created; main = e1c9429 (P1).
 2. Owner: run `launchers\00_Self_test.cmd` and `01_Run_tests.cmd` on the laptop after installing requirements.txt.
-3. Owner: answer Q1-Q6.
+3. Owner: answer Q2-Q5 (needed by Stream 2), Q6, Q7, Q9, Q11, Q12, Q13 (a) and (c). Q1, Q8, Q13 (b) decided 2026-11-16.
 4. P2 Pool v1: Stream 1 submission export + anonymisation (pool IDs, keyed hashes, allow-list) and Stream 2
    comparability, with G1.2, G1.3, G1.5-G1.8 and G2.1-G2.7 built and fail-on-purpose tested.
