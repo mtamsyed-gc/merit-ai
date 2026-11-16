@@ -126,6 +126,21 @@ side_tools/merit/docs/RELEASE_NOTES_v7.5.0.md): the meanings change and the layo
   carry an assumed loss ratio, not a development estimate (Q11).
 - **Synthetic runs:** stamped IP4-9 (the generator writes the pinned version).
 
+SPEC re-read against Merit v10.7.0 (2026-11-16, owner's instruction; SPEC.md is the 2026-10-25 export, written at
+Merit v7.3). Findings to settle before the phase named; none is applied to SPEC or code yet (the doc is the master).
+| # | Phase | Finding | Proposed |
+| --- | --- | --- | --- |
+| R1 | P2 | G1.2 ("no Stop exception codes") contradicts G1.3 / D-2: Merit writes E-CL-MATCHRATE with Severity Stop below 95% match (config/message_codes.csv) and the run continues, so a run in D-2's 85-95% restricted band always carries a Stop code | G1.2 ignores E-CL-MATCHRATE; G1.3 governs the match rate |
+| R2 | P2 | D-2's match rate (less pre-inception, out-of-cover, reversals) is not Merit's: recon_claims counts out-of-cover lines as matched and has no reversals column | Owner states D-2 as a formula on recon_claims columns, or a Merit change request |
+| R3 | P2 | Stream 1 tags "Merit version" and "data tier T0-T3 (SPEC section 5)": the manifests carry workflow_version and contract_version, no pack version, engine or tier; SPEC section 5 belongs to the retired ETE spec | Tag the workflow versions; owner defines the tiers here |
+| R4 | P2 | Not in SPEC: scope register (main tables in scope only; *_excluded twins; RESHARE / CARVEOUT / CAP rows), currency (manifest stamped AED for SAR / QAR payers before Merit v8.0.12), secondary member identifier (MemKey can be a salted hash that changes when a client folder is rebuilt) | G1 Stop when dim_life Currency is not AED or Country not UAE; Q12 (b) for scope; owner rule for the member token |
+| R5 | P2 | Maturity control assumes chain-ladder ultimates: since v7.7.0 the youngest months can be Bornhuetter-Ferguson / Benktander (ultimates.Method), an assumed loss ratio and not experience | Leave those months out of calibration as well as CF below 0.80 |
+| R6 | P3 | Development benchmark: Merit's 03b factors use 90% / 5% credibility, D-3 is 90% / 10%; cf_selected Source says which factors are data-derived; the dev_* triangles are not in the contract | Pool only derived factors; record the two standards as deliberate |
+| R7 | P4 | D-5 and M1 point to "SPEC D22 10%" and "P5b" of the retired engine; Merit's live trend inputs are PNLR 8% and the development workbook's prior trend. G5's baseline "Merit's one-way relativities" does not exist as an output (the page shows loss ratios by segment) | Re-point D-5; Merit AI computes the one-way baseline itself |
+| R8 | P6 | M5 overlaps Merit's stochastics (stoch/, v10.3.0): the same GPD fit, per client and layer-driven. D-7's cap unit: Merit's is life x UW year per policy (tools/basis.py), so a member on two policies is two units | M5 builds only the pooled threshold study and excess frequency; D-7 names the unit |
+| R9 | P3 | Stream 7 says "launchers as in Merit"; Merit now has a browser page (GC UI kit) and a report builder with a fixed cover and basis of preparation. CLAUDE.md here says no GUI | Owner decides whether Merit AI adopts them |
+Still true: Merit's PNLR has no input for an external loss ratio (D-6); no rate-change history is held (M6).
+
 Open questions for the owner (defaults in use):
 | # | Question | In use |
 | --- | --- | --- |
