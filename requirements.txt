@@ -2,8 +2,11 @@
 #   py -m pip install --user -r requirements.txt
 # Base set = Merit's native pins (ete-dashboard requirements-native.txt, verified 2026-10-06).
 # statsmodels / scipy / patsy added by decision D-8 (2026-10-25); the owner confirmed Artifactory carries them.
-# Versions below are the ones the P1 test suite ran on; re-confirm on the team's Python (3.12+, owner laptop 3.14).
-duckdb==1.5.6
+# 2026-11-16 (owner: "Align packages with Merit"): CPython 3.14 and duckdb 2.0.0, as Merit v10.0.0 onwards
+# (ete-dashboard requirements-native.txt). Every shared package carries Merit's version. Suite run on Python 3.14.6.
+# DuckDB 2.0 rules, as Merit: no fetchone() (contract.one_row), no ~ / !~, no single-arrow lambdas, no explicit
+# transactions.
+duckdb==2.0.0
 pyarrow==25.0.1
 pandas==3.0.6
 numpy==2.5.3

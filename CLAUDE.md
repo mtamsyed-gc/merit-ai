@@ -17,9 +17,11 @@ change request in that repository, never patched from here.
 - Thresholds, maps and classes live in control/*.json (versioned). Code reads them; code never hard-codes a threshold.
 
 ## Runtime
-- Native CPython 3.12+ on Windows (owner laptop runs 3.14), packages pinned in requirements.txt, installed
+- Native CPython 3.14 on Windows (as Merit v10; duckdb 2.0.0), packages pinned in requirements.txt, installed
   per user from GC Artifactory. Allowed imports: stdlib + requirements.txt. Anything else needs owner approval and a pin.
 - Code runs on pandas 3.x (copy-on-write, string dtype) and numpy 2.x.
+- DuckDB 2.0: never fetchone() (use meritai.contract.one_row), no `~` / `!~`, no single-arrow lambdas, no explicit
+  transactions.
 - Launchers are numbered .cmd files in launchers/ calling `py run.py <command>`. Never .ps1. Paths resolved
   from run.py's own location, never from the current directory. No network calls, no GUI.
 - Storage: Parquet + DuckDB in folders that are never committed (pool/, runs/, out/).

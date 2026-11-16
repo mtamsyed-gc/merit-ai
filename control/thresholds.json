@@ -1,14 +1,14 @@
 {
  "_note": "Gate thresholds (SPEC gate tables; DECIDED values from SPEC 'Decisions needed' override proposed ones). Keyed by check id. Changing a value is a recorded decision: bump 'version' and log it in HANDOVER.md.",
- "version": "TH-1.0",
+ "version": "TH-1.1",
  "checks": {
   "G1.1": {
    "contract_version_missing_level": "Flag",
-   "_open": "SPEC G1.1 is Stop on an exact version match. Merit does not stamp its contract version in run_manifest yet; until it does, schema conformance is the test and a missing stamp is raised at the level above (interim rule, owner to confirm: HANDOVER Q1)."
+   "_decision": "Owner 2026-11-16 (HANDOVER Q1): a run with no contract_version stamp (Merit before v7.3.2) whose schema matches the pin is a Flag, needing a sign-off; a stamp that differs from the pin stays a Stop (SPEC G1.1)."
   },
   "G1.2": {
    "fan_diff_abs_max": 0.01,
-   "_source": "Merit user manual 3.13: FanDiff is 0 within rounding (< 0.01). Proposed as the G1.2 tolerance; owner to confirm (HANDOVER Q8)."
+   "_decision": "Owner 2026-11-16 (HANDOVER Q8): 0.01 (Merit user manual 3.13: FanDiff is 0 within rounding, < 0.01)."
   },
   "G1.3": {
    "full_min": 0.95,

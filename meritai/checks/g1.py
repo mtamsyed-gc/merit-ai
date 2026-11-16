@@ -56,7 +56,7 @@ def _tables(run):
 
 def _known_columns(contract, table):
     key = table if table in K.MAIN_TABLES else next((f for f in K.FAMILIES if table.startswith(f)), None)
-    return {c for c, _ in K.columns(contract, key)} if key else set()
+    return {c for c, _ in K.columns(contract, key, table)} if key else set()
 
 
 @check("G1.4")
@@ -82,14 +82,14 @@ def g1_4(ctx):
                                for i, c in enumerate(have, 1) if c not in ok]
             for i, c in enumerate(have, 1):            # a column name can itself be an identifier
                 for name, rx in pats:
-                    if con.execute("SELECT regexp_matches(?, ?)", [c, rx]).fetchone()[0]:
+                    if K.one_row(con.execute("SELECT regexp_matches(?, ?)", [c, rx]))[0]:
                         hits.append({"table": t, "column": f"(column {i}) header", "pattern": name, "rows": 1})
             pairs = [(i, c, name, rx) for i, c in enumerate(have, 1) for name, rx in pats]
             if not pairs:
                 continue
             exprs = ["count_if(regexp_matches(CAST(\"%s\" AS VARCHAR), '%s'))"
                      % (c.replace('"', '""'), rx.replace("'", "''")) for _, c, _, rx in pairs]
-            counts = con.execute(f'SELECT {", ".join(exprs)} FROM "t"').fetchone()
+            counts = K.one_row(con.execute(f'SELECT {", ".join(exprs)} FROM "t"'))
             for (i, c, name, _), n in zip(pairs, counts):
                 if n:
                     hits.append({"table": t, "column": label(i, c), "pattern": name, "rows": int(n)})
